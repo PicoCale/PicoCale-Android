@@ -19,9 +19,10 @@ import edu.cmu.mobileapp.picocale.view.activity.MainActivity;
 public class MainFragment extends Fragment {
 
     private ActionBar actionBar;
-    private ActionBar.Tab homeTab, cloudTab;
+    private ActionBar.Tab homeTab, cloudTab, settingsTab;
     private Fragment homeFragment;
     private Fragment cloudFragment;
+    private Fragment settingsFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,19 +41,24 @@ public class MainFragment extends Fragment {
         //instantiate fragments
         homeFragment = new HomeFragment();
         cloudFragment = new CloudFragment();
+        settingsFragment=new SettingsFragment();
 
         //instantiate the tab items
         homeTab = actionBar.newTab();
         homeTab.setIcon(R.drawable.icon_home);
         cloudTab = actionBar.newTab();
         cloudTab.setIcon(R.drawable.icon_cloud);
+        settingsTab=actionBar.newTab();
+        settingsTab.setIcon(R.drawable.icon_settings);
 
         //add listeners to the tab items
         homeTab.setTabListener(new TabClickListener(homeFragment, R.id.fragment_main));
         cloudTab.setTabListener(new TabClickListener(cloudFragment, R.id.fragment_main));
+        settingsTab.setTabListener(new TabClickListener(settingsFragment,R.id.fragment_main));
 
         //add tab items to the action bar
         actionBar.addTab(homeTab);
         actionBar.addTab(cloudTab);
+        actionBar.addTab(settingsTab);
     }
 }
