@@ -14,4 +14,15 @@
         android:textStyle="bold"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@drawable/icon_go"
+        android:layout_marginBottom="15dp"
+        android:layout_alignBottom="@+id/locationNameText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
 </RelativeLayout>

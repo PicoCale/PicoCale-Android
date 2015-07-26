@@ -7,6 +7,7 @@ import android.provider.MediaStore;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import edu.cmu.mobileapp.picocale.util.LocationUtils;
@@ -46,6 +47,7 @@ public class DeviceImageLocationServiceImpl implements ImageLocationService {
                     locationList.add(location);
             }
         }
+        Collections.sort(locationList, String.CASE_INSENSITIVE_ORDER);
         return locationList;
     }
 }
