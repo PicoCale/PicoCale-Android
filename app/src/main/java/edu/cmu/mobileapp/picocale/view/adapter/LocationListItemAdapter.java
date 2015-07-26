@@ -9,7 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.Set;
 
 import edu.cmu.mobileapp.picocale.R;
 
@@ -49,7 +48,7 @@ public class LocationListItemAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (convertView == null)
-            view = inflater.inflate(R.layout.item_location, null);
+            view = inflater.inflate(R.layout.item_list_location, null);
         TextView fullNameText = (TextView)view.findViewById(R.id.locationNameText);
         String locationName = locationList.get(position);
         fullNameText.setText(locationName);

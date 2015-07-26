@@ -8,8 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import edu.cmu.mobileapp.picocale.R;
-import edu.cmu.mobileapp.picocale.task.LocalImageLocationFetcher;
-import edu.cmu.mobileapp.picocale.util.GalleryLocationUtils;
+import edu.cmu.mobileapp.picocale.task.DeviceImageLocationFetcher;
 
 /**
  * Created by srikrishnan_suresh on 25-07-2015.
@@ -26,13 +25,13 @@ public class AlbumFragment extends android.support.v4.app.Fragment {
         final SwipeRefreshLayout pullToRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.pullToRefresh);
         listView = (ListView) rootView.findViewById(R.id.locationListView);
 
-        new LocalImageLocationFetcher(getActivity(), listView).execute();
+        new DeviceImageLocationFetcher(getActivity(), listView).execute();
 
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
             public void onRefresh() {
-                new LocalImageLocationFetcher(getActivity(), listView).execute();
+                new DeviceImageLocationFetcher(getActivity(), listView).execute();
                 pullToRefresh.setRefreshing(false);
             }
         });

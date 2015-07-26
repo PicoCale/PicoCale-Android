@@ -7,17 +7,19 @@ import android.widget.ListView;
 
 import java.util.List;
 
-import edu.cmu.mobileapp.picocale.util.GalleryLocationUtils;
+import edu.cmu.mobileapp.picocale.service.DeviceImageLocationServiceImpl;
+import edu.cmu.mobileapp.picocale.service.ImageLocationService;
 import edu.cmu.mobileapp.picocale.view.adapter.LocationListItemAdapter;
 
 /**
  * Created by srikrishnan_suresh on 07/26/2015.
  */
-public class LocalImageLocationFetcher extends AsyncTask<String, Void, List<String>> {
+public class DeviceImageLocationFetcher extends AsyncTask<String, Void, List<String>> {
     private Activity activity;
     private ListView listView;
     private ProgressDialog progress;
-    public LocalImageLocationFetcher(Activity activity, ListView listView) {
+    ImageLocationService locationService = new DeviceImageLocationServiceImpl();
+    public DeviceImageLocationFetcher(Activity activity, ListView listView) {
         this.activity = activity;
         this.listView = listView;
     }
@@ -42,6 +44,6 @@ public class LocalImageLocationFetcher extends AsyncTask<String, Void, List<Stri
 
     @Override
     protected List<String> doInBackground(String... params) {
-        return GalleryLocationUtils.getGalleryLatLngList(activity);
+        return locationService.getLocationAddressList(activity);
     }
 }

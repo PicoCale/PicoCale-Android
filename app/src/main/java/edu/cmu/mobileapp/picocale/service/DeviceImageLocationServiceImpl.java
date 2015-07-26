@@ -1,27 +1,22 @@
-package edu.cmu.mobileapp.picocale.util;
+package edu.cmu.mobileapp.picocale.service;
 
 import android.app.Activity;
-import android.content.Context;
 import android.database.Cursor;
-import android.location.Address;
-import android.location.Geocoder;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
+import edu.cmu.mobileapp.picocale.util.LocationUtils;
 
 /**
- * Created by srikrishnan_suresh on 25-07-2015.
+ * Created by srikrishnan_suresh on 07/26/2015.
  */
-public class GalleryLocationUtils {
-
-    public static List<String> getGalleryLatLngList(Activity activity) {
+public class DeviceImageLocationServiceImpl implements ImageLocationService {
+    @Override
+    public List<String> getLocationAddressList(Activity activity) {
         List<String> locationList = new ArrayList<String>();
         String[] columns = { MediaStore.Images.ImageColumns.LATITUDE,
                 MediaStore.Images.ImageColumns.LONGITUDE
@@ -46,27 +41,11 @@ public class GalleryLocationUtils {
             longitude = cursor.getDouble(cursor.getColumnIndex(MediaStore.Images.ImageColumns.LONGITUDE));
             latLng = new LatLng(latitude, longitude);
             if(latitude != 0.0 && longitude != 0.0) {
-                location = getAddressFromLocation(activity, latLng).getAddressLine(0);
+                location = LocationUtils.getAddressFromLocation(activity, latLng).getAddressLine(0);
                 if(!locationList.contains(location))
                     locationList.add(location);
             }
         }
         return locationList;
-    }
-
-    /**
-     * Fetches the address for a given location and context
-     * */
-    public static Address getAddressFromLocation(Context context, LatLng latLng) {
-        Address address = null;
-        Geocoder gCoder = new Geocoder(context);
-        try {
-            List<Address> addresses = gCoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-            address = addresses.get(0);
-        }
-        catch (IOException exception) {
-
-        }
-        return address;
     }
 }

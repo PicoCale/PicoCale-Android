@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.cmu.mobileapp.picocale.R;
-import edu.cmu.mobileapp.picocale.util.GalleryLocationUtils;
 
 /**
  * Created by srikrishnan_suresh on 25-07-2015.
