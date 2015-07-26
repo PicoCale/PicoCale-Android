@@ -11,12 +11,12 @@ import edu.cmu.mobileapp.picocale.util.GalleryLocationUtils;
 /**
  * Created by srikrishnan_suresh on 25-07-2015.
  */
-public class HomeFragment extends android.support.v4.app.Fragment {
+public class AlbumFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-
+        View rootView = inflater.inflate(R.layout.fragment_album, container, false);
+        GalleryLocationUtils.getGalleryLatLngList(getActivity());
         return rootView;
     }
 }

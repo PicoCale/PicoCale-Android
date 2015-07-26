@@ -3,7 +3,6 @@ package edu.cmu.mobileapp.picocale.view.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,9 @@ import edu.cmu.mobileapp.picocale.view.activity.MainActivity;
 public class MainFragment extends Fragment {
 
     private ActionBar actionBar;
-    private ActionBar.Tab homeTab, cloudTab, settingsTab;
+    private ActionBar.Tab homeTab, albumTab, cloudTab, settingsTab;
     private Fragment homeFragment;
+    private Fragment albumFragment;
     private Fragment cloudFragment;
     private Fragment settingsFragment;
 
@@ -40,12 +40,15 @@ public class MainFragment extends Fragment {
 
         //instantiate fragments
         homeFragment = new HomeFragment();
+        albumFragment = new AlbumFragment();
         cloudFragment = new CloudFragment();
         settingsFragment=new SettingsFragment();
 
         //instantiate the tab items
         homeTab = actionBar.newTab();
         homeTab.setIcon(R.drawable.icon_home);
+        albumTab = actionBar.newTab();
+        albumTab.setIcon(R.drawable.icon_album);
         cloudTab = actionBar.newTab();
         cloudTab.setIcon(R.drawable.icon_cloud);
         settingsTab=actionBar.newTab();
@@ -53,11 +56,13 @@ public class MainFragment extends Fragment {
 
         //add listeners to the tab items
         homeTab.setTabListener(new TabClickListener(homeFragment, R.id.fragment_main));
+        albumTab.setTabListener(new TabClickListener(albumFragment, R.id.fragment_main));
         cloudTab.setTabListener(new TabClickListener(cloudFragment, R.id.fragment_main));
         settingsTab.setTabListener(new TabClickListener(settingsFragment,R.id.fragment_main));
 
         //add tab items to the action bar
         actionBar.addTab(homeTab);
+        actionBar.addTab(albumTab);
         actionBar.addTab(cloudTab);
         actionBar.addTab(settingsTab);
     }
