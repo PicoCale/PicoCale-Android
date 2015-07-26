@@ -5,9 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
-import android.media.ExifInterface;
-import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -24,8 +21,8 @@ import java.util.Set;
  */
 public class GalleryLocationUtils {
 
-    public static Set<String> getGalleryLatLngList(Activity activity) {
-        Set<String> locationSet = new HashSet<String>();
+    public static List<String> getGalleryLatLngList(Activity activity) {
+        List<String> locationList = new ArrayList<String>();
         String[] columns = { MediaStore.Images.ImageColumns.LATITUDE,
                 MediaStore.Images.ImageColumns.LONGITUDE
         };
@@ -42,19 +39,19 @@ public class GalleryLocationUtils {
         int count = cursor.getCount();
         Double latitude, longitude;
         LatLng latLng = null;
-        Address address = null;
+        String location = null;
         for (int i = 0; i < count; i++) {
             cursor.moveToPosition(i);
             latitude = cursor.getDouble(cursor.getColumnIndex(MediaStore.Images.ImageColumns.LATITUDE));
             longitude = cursor.getDouble(cursor.getColumnIndex(MediaStore.Images.ImageColumns.LONGITUDE));
             latLng = new LatLng(latitude, longitude);
             if(latitude != 0.0 && longitude != 0.0) {
-                address = getAddressFromLocation(activity, latLng);
-                locationSet.add(address.getAddressLine(0));
+                location = getAddressFromLocation(activity, latLng).getAddressLine(0);
+                if(!locationList.contains(location))
+                    locationList.add(location);
             }
         }
-        Log.i("Set count---->",locationSet.size()+"");
-        return locationSet;
+        return locationList;
     }
 
     /**
