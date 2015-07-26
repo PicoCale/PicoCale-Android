@@ -7,6 +7,7 @@ import android.widget.ListView;
 
 import java.util.List;
 
+import edu.cmu.mobileapp.picocale.listener.DeviceImageLocationItemClickListener;
 import edu.cmu.mobileapp.picocale.service.DeviceImageLocationServiceImpl;
 import edu.cmu.mobileapp.picocale.service.ImageLocationService;
 import edu.cmu.mobileapp.picocale.view.adapter.LocationListItemAdapter;
@@ -39,7 +40,7 @@ public class DeviceImageLocationFetcher extends AsyncTask<String, Void, List<Str
         super.onPostExecute(locationList);
         progress.hide();
         listView.setAdapter(new LocationListItemAdapter(activity, locationList));
-//        listView.setOnItemClickListener(new TweetItemClickListener(activity, locationList));
+        listView.setOnItemClickListener(new DeviceImageLocationItemClickListener(activity, locationList));
     }
 
     @Override
