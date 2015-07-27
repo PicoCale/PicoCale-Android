@@ -3,6 +3,7 @@ package edu.cmu.mobileapp.picocale.task;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.GridView;
 import android.widget.ListView;
 
@@ -42,12 +43,12 @@ public class DeviceImageFetcher extends AsyncTask<String, Void, List<String>> {
     protected void onPostExecute(List<String> locationList) {
         super.onPostExecute(locationList);
         progress.hide();
-
+        Log.i("images>>>", locationList.toString());
     }
 
     @Override
     protected List<String> doInBackground(String... params) {
         String location = params[0];
-        return imageService.getImageList(location);
+        return imageService.getImageList(activity, location);
     }
 }
