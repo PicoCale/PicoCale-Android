@@ -5,16 +5,12 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.GridView;
-import android.widget.ListView;
 
 import java.util.List;
 
-import edu.cmu.mobileapp.picocale.listener.DeviceImageLocationItemClickListener;
-import edu.cmu.mobileapp.picocale.service.DeviceImageLocationServiceImpl;
 import edu.cmu.mobileapp.picocale.service.DeviceImageServiceImpl;
-import edu.cmu.mobileapp.picocale.service.ImageLocationService;
 import edu.cmu.mobileapp.picocale.service.ImageService;
-import edu.cmu.mobileapp.picocale.view.adapter.LocationListItemAdapter;
+import edu.cmu.mobileapp.picocale.view.adapter.ImageGridAdapter;
 
 /**
  * Created by srikrishnan_suresh on 07/26/2015.
@@ -27,6 +23,7 @@ public class DeviceImageFetcher extends AsyncTask<String, Void, List<String>> {
 
     public DeviceImageFetcher(Activity activity, GridView gridView) {
         this.activity = activity;
+        this.gridView = gridView;
     }
 
     @Override
@@ -43,7 +40,7 @@ public class DeviceImageFetcher extends AsyncTask<String, Void, List<String>> {
     protected void onPostExecute(List<String> locationList) {
         super.onPostExecute(locationList);
         progress.hide();
-        Log.i("images>>>", locationList.toString());
+        gridView.setAdapter(new ImageGridAdapter(activity, locationList));
     }
 
     @Override

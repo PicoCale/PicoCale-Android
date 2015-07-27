@@ -15,13 +15,13 @@ import edu.cmu.mobileapp.picocale.R;
 /**
  * Created by srikrishnan_suresh on 07/26/2015.
  */
-public class LocationListItemAdapter extends BaseAdapter {
+public class LocationListAdapter extends BaseAdapter {
 
     private Activity activity;
     private List<String> locationList;
     private static LayoutInflater inflater = null;
 
-    public LocationListItemAdapter(Activity activity, List<String> locationList) {
+    public LocationListAdapter(Activity activity, List<String> locationList) {
         this.activity = activity;
         this.locationList = locationList;
         inflater = (LayoutInflater) activity
