@@ -25,6 +25,7 @@ public class DeviceImageLocationItemClickListener implements AdapterView.OnItemC
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String location = locationList.get(position);
         Intent galleryIntent = new Intent(activity.getApplicationContext(), GalleryActivity.class);
+        galleryIntent.putExtra("location", location);
         activity.startActivity(galleryIntent);
 
     }

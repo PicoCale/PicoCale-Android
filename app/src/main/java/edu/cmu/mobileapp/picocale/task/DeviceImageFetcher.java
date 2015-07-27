@@ -3,27 +3,29 @@ package edu.cmu.mobileapp.picocale.task;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.widget.GridView;
 import android.widget.ListView;
 
 import java.util.List;
 
 import edu.cmu.mobileapp.picocale.listener.DeviceImageLocationItemClickListener;
 import edu.cmu.mobileapp.picocale.service.DeviceImageLocationServiceImpl;
+import edu.cmu.mobileapp.picocale.service.DeviceImageServiceImpl;
 import edu.cmu.mobileapp.picocale.service.ImageLocationService;
+import edu.cmu.mobileapp.picocale.service.ImageService;
 import edu.cmu.mobileapp.picocale.view.adapter.LocationListItemAdapter;
 
 /**
  * Created by srikrishnan_suresh on 07/26/2015.
  */
-public class DeviceImageLocationFetcher extends AsyncTask<String, Void, List<String>> {
+public class DeviceImageFetcher extends AsyncTask<String, Void, List<String>> {
     private Activity activity;
-    private ListView listView;
+    private GridView gridView;
     private ProgressDialog progress;
-    private ImageLocationService locationService = new DeviceImageLocationServiceImpl();
+    private ImageService imageService = new DeviceImageServiceImpl();
 
-    public DeviceImageLocationFetcher(Activity activity, ListView listView) {
+    public DeviceImageFetcher(Activity activity, GridView gridView) {
         this.activity = activity;
-        this.listView = listView;
     }
 
     @Override
@@ -40,12 +42,12 @@ public class DeviceImageLocationFetcher extends AsyncTask<String, Void, List<Str
     protected void onPostExecute(List<String> locationList) {
         super.onPostExecute(locationList);
         progress.hide();
-        listView.setAdapter(new LocationListItemAdapter(activity, locationList));
-        listView.setOnItemClickListener(new DeviceImageLocationItemClickListener(activity, locationList));
+
     }
 
     @Override
     protected List<String> doInBackground(String... params) {
-        return locationService.getLocationAddressList(activity);
+        String location = params[0];
+        return imageService.getImageList(location);
     }
 }
