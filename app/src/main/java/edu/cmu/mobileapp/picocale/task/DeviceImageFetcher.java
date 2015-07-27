@@ -8,6 +8,7 @@ import android.widget.GridView;
 
 import java.util.List;
 
+import edu.cmu.mobileapp.picocale.listener.GalleryItemClickListener;
 import edu.cmu.mobileapp.picocale.service.DeviceImageServiceImpl;
 import edu.cmu.mobileapp.picocale.service.ImageService;
 import edu.cmu.mobileapp.picocale.view.adapter.ImageGridAdapter;
@@ -41,6 +42,7 @@ public class DeviceImageFetcher extends AsyncTask<String, Void, List<String>> {
         super.onPostExecute(locationList);
         progress.hide();
         gridView.setAdapter(new ImageGridAdapter(activity, locationList));
+        gridView.setOnItemClickListener(new GalleryItemClickListener(activity, locationList));
     }
 
     @Override
