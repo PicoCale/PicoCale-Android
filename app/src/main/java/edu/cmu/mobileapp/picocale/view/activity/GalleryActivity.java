@@ -3,6 +3,7 @@ package edu.cmu.mobileapp.picocale.view.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -11,7 +12,7 @@ import edu.cmu.mobileapp.picocale.R;
 /**
  * Created by srikrishnan_suresh on 07/26/2015.
  */
-public class GalleryActivity extends Activity {
+public class GalleryActivity extends FragmentActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
