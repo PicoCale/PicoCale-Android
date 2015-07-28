@@ -1,7 +1,9 @@
 package edu.cmu.mobileapp.picocale.view.activity;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -36,5 +38,18 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        //this is very important, otherwise you would get a null Scheme in the onResume later on.
+        Log.i("Activity", "On resume");
+        setIntent(intent);
+    }
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
     }
 }
