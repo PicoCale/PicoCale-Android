@@ -23,6 +23,10 @@
                 <data android:scheme="flickrj-android-sample-oauth" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.activity.GalleryActivity" >
+        </activity>
+        <activity android:name=".view.activity.ViewImageActivity" >
+        </activity>
     </application>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET"/>
