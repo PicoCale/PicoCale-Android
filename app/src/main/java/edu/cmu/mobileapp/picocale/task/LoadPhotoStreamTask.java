@@ -3,10 +3,12 @@ package edu.cmu.mobileapp.picocale.task;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -82,7 +84,7 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
             PhotoList locationBasedList=new PhotoList();
             PhotoList photoList=f.getPeopleInterface().getPhotos(user.getId(), extras, 20, 1);
             LocationManager locationManager=(LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             Log.i("Count",Integer.toString(photoList.size()));
             for(Photo photo:photoList)
             {
@@ -90,12 +92,13 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
                     try {
                         GeoData geoData = f.getGeoInterface().getLocation(photo.getId());
                         Log.i("Photo Lat:", Float.toString(geoData.getLatitude()));
-                        double maxLatitude = location.getLatitude() + 1;
-                        double minLat = location.getLatitude() - 1;
-                        if (geoData.getLatitude() <= maxLatitude) {
+//                        Log.i("--------->",String.valueOf(location.getLatitude()));
+//                        double maxLatitude = location.getLatitude();
+//                        double minLat = location.getLatitude() - 1;
+//                        if (geoData.getLatitude() <= maxLatitude) {
                             Log.i("Photo ID Added:", photo.getId());
                             locationBasedList.add(photo);
-                        }
+//                        }
                     }
                     catch (FlickrException e)
                     {
@@ -103,6 +106,7 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
                     }
                 }
             }
+
             return f.getPeopleInterface().getPhotos(user.getId(), extras, 20, 1);
             //return locationBasedList;
 

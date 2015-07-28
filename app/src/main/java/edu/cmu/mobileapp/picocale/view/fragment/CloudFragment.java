@@ -1,6 +1,7 @@
 package edu.cmu.mobileapp.picocale.view.fragment;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,11 +60,9 @@ public class CloudFragment extends android.support.v4.app.Fragment {
             }
         }
         else {
-
             Toast.makeText(getActivity().getApplicationContext(),"Logged in",Toast.LENGTH_LONG).show();
             load(oauth,gridView);
         }
-
         return rootView;
     }
     /**
@@ -117,7 +116,6 @@ public class CloudFragment extends android.support.v4.app.Fragment {
             {
                 Log.i("GridView", " not null");
             }
-            Log.i("Loaded","Hell yeah!");
             Log.i("Oauth",oauth.getToken().toString());
             Log.i("Oauth",oauth.getToken().toString());
             new LoadPhotoStreamTask(getActivity(),getActivity().getApplicationContext(),gridView).execute(oauth);

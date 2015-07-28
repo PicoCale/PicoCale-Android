@@ -2,13 +2,45 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notifications ON/OFF"
+        android:id="@+id/notificationSwitch"
+        android:checked="false"
+        android:layout_above="@+id/userRadiusValue"
+        android:layout_alignLeft="@+id/radiusView"
+        android:layout_alignStart="@+id/radiusView"
+        android:layout_marginBottom="30dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/userRadiusValue"
+        android:hint="5 miles"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Settings"
-        android:id="@+id/textView3"
-        android:layout_alignParentTop="true"
+        android:text="Radius"
+        android:id="@+id/radiusView"
+        android:layout_alignBottom="@+id/userRadiusValue"
+        android:layout_toLeftOf="@+id/userRadiusValue"
+        android:layout_toStartOf="@+id/userRadiusValue"
+        android:layout_marginRight="38dp"
+        android:layout_marginEnd="38dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SAVE"
+        android:id="@+id/saveButton"
+        android:layout_below="@+id/userRadiusValue"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="114dp" />
+        android:layout_marginTop="62dp" />
 </RelativeLayout>
