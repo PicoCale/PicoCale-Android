@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import edu.cmu.mobileapp.picocale.R;
+import edu.cmu.mobileapp.picocale.util.DistanceUtils;
 import edu.cmu.mobileapp.picocale.util.FlickrHelper;
 import edu.cmu.mobileapp.picocale.view.adapter.LazyAdapter;
 
@@ -41,8 +42,15 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
     String oauthToken;
     String oauthTokenSecret;
     ProgressDialog mProgressDialog;
+    Location location;
+    double currentLatitude, currentLongitude;
+    double latitudeCorrectionFactor, longitudeCorrectionFactor;
+    double minLatitude, maxLatitude;
+    double minLongitude, maxLongitude;
+    double radiusValue;
+    double photoLatitude, photoLongitude;
 
-    public LoadPhotoStreamTask(Activity activity,Context context, GridView gridView) {
+    public LoadPhotoStreamTask(Activity activity,Context context, GridView gridView, Location pLocation,double pRadiusValue) {
         this.activity = activity;
         this.context=context;
         this.gridView = gridView;
@@ -50,6 +58,8 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
         {
             Log.i("Gridview","null");
         }
+        this.location = pLocation;
+        this.radiusValue = pRadiusValue;
     }
 
 
@@ -80,21 +90,51 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
         extras.add("views"); //$NON-NLS-1$
         User user = arg0[0].getUser();
         try {
+
+            //Getting the current Location
+            currentLatitude = location.getLatitude();
+            currentLongitude = location.getLongitude();
+
+            //Getting the min, max location values
+            latitudeCorrectionFactor = DistanceUtils.getLatitudeCorrectionFactor(radiusValue);
+            minLatitude = currentLatitude - latitudeCorrectionFactor;
+            maxLatitude = currentLatitude + latitudeCorrectionFactor;
+
+            longitudeCorrectionFactor = DistanceUtils.getLongitudeCorrectionFactor(radiusValue,minLatitude);
+            minLongitude = currentLongitude + longitudeCorrectionFactor;
+            maxLongitude = currentLongitude - longitudeCorrectionFactor;
+
             //Getting the list of photos
             //return f.getPeopleInterface().getPhotos(user.getId(), extras, 20, 1);
             PhotoList locationBasedList=new PhotoList();
             PhotoList photoList=f.getPeopleInterface().getPhotos(user.getId(), extras, 20, 1);
-            Log.i("Count",Integer.toString(photoList.size()));
+            Log.i("===Count",Integer.toString(photoList.size()));
             for(Photo photo:photoList)
             {
                 if(photo!=null) {
                     try {
                         GeoData geoData = f.getGeoInterface().getLocation(photo.getId());
-                        Log.i("Photo Lat:", Float.toString(geoData.getLatitude()));
-//                        if (geoData.getLatitude() <= maxLatitude) {
+                        photoLatitude = geoData.getLatitude();
+                        photoLongitude = geoData.getLongitude();
+
+                        //printing out the values
+                        Log.i("===>Photo Lat:", Double.toString(photoLatitude));
+                        Log.i("===>Photo Lon:", Double.toString(photoLongitude));
+                        Log.i("===>Min Lat:", Double.toString(minLatitude));
+                        Log.i("===>Max Lat:", Double.toString(maxLatitude));
+                        Log.i("===>Min Lon:", Double.toString(minLongitude));
+                        Log.i("===>Max Lon:", Double.toString(maxLongitude));
+
+                        //Deciding whether to display image or not
+                        if ((photoLatitude >=minLatitude && photoLatitude <= maxLatitude) &&
+                                (photoLongitude <=minLongitude && photoLongitude>=maxLongitude)){
                             Log.i("Photo ID Added:", photo.getId());
                             locationBasedList.add(photo);
-//                        }
+                        }
+                        else{
+                            Log.i("Sry!Photo ID Not Added:", photo.getId());
+                        }
+
                     }
                     catch (FlickrException e)
                     {
@@ -103,8 +143,8 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
                 }
             }
 
-            return f.getPeopleInterface().getPhotos(user.getId(), extras, 20, 1);
-            //return locationBasedList;
+//            return f.getPeopleInterface().getPhotos(user.getId(), extras, 20, 1);
+            return locationBasedList;
 
         } catch (Exception e) {
 

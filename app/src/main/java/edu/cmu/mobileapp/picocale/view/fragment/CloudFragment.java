@@ -42,7 +42,7 @@ public class CloudFragment extends android.support.v4.app.Fragment {
     public static final String KEY_USER_ID = "flickrj-android-userId"; //$NON-NLS-1$
     static final String PREF_KEY_LOGIN = "isLoggedIn";
     LocationManager lm;
-    Location l;
+    Location location;
     GridView gridView;
     double currentLatitude,currentLongitude;
     Criteria c;
@@ -72,14 +72,14 @@ public class CloudFragment extends android.support.v4.app.Fragment {
         }
         else {
             Toast.makeText(getActivity().getApplicationContext(),getString(R.string.LoggedIn_Message),Toast.LENGTH_SHORT).show();
-            load(oauth,gridView);
+            load(oauth, gridView);
         }
-        l= LocationUtils.getCurrentLocation(getActivity());
+        location = LocationUtils.getCurrentLocation(getActivity());
 
         //Obtains the current latitude and longitude
-        if(l!=null){
-            currentLatitude = l.getLatitude();
-            currentLongitude = l.getLongitude();
+        if(location !=null){
+            currentLatitude = location.getLatitude();
+            currentLongitude = location.getLongitude();
         }
         else
         {
@@ -140,7 +140,7 @@ public class CloudFragment extends android.support.v4.app.Fragment {
     private void load(OAuth oauth,GridView gridView) {
         SharedPreferences sharedPref = getActivity().getSharedPreferences("PicoCale", 0);
         String radiusValue = sharedPref.getString("userRadius", "defaultRadius");
-        Boolean notificationval = sharedPref.getBoolean("notificationSetting",true);
+//        Boolean notificationval = sharedPref.getBoolean("notificationSetting",true);
         if (oauth != null) {
             if(gridView==null) {
                 Log.i("GridView", "null");
@@ -151,7 +151,7 @@ public class CloudFragment extends android.support.v4.app.Fragment {
             }
 //            Log.i("Oauth",oauth.getToken().toString());
 //            Log.i("Oauth",oauth.getToken().toString());
-            new LoadPhotoStreamTask(getActivity(),getActivity().getApplicationContext(),gridView).execute(oauth);
+            new LoadPhotoStreamTask(getActivity(),getActivity().getApplicationContext(),gridView,location,Double.parseDouble(radiusValue)).execute(oauth);
         }
     }
 
