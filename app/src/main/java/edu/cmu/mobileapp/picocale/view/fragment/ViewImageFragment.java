@@ -3,7 +3,6 @@ package edu.cmu.mobileapp.picocale.view.fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,20 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import edu.cmu.mobileapp.picocale.R;
-import edu.cmu.mobileapp.picocale.task.DownloadImageTask;
-import edu.cmu.mobileapp.picocale.task.ImageDownloadTask;
 import edu.cmu.mobileapp.picocale.task.LoadImageTask;
 import edu.cmu.mobileapp.picocale.util.FlushedInputStream;
-import edu.cmu.mobileapp.picocale.util.ImageUtils;
 
 /**
  * Created by srikrishnan_suresh on 07/27/2015.

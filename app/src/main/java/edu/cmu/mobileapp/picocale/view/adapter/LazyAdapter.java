@@ -58,12 +58,13 @@ public class LazyAdapter extends BaseAdapter {
         Log.i("Photos count GetView:",Integer.toString(getCount()));
         View vi = convertView;
         if(convertView == null)
-            vi = inflater.inflate(R.layout.flickrgridview_row, null);
+            vi = inflater.inflate(R.layout.item_grid_image, null);
         /*Flickr f = FlickrHelper.getInstance().getFlickrAuthed(oauthToken,
                 oauthTokenSecret);*/
 
-        TextView text=(TextView)vi.findViewById(R.id.textView);;
-        ImageView image=(ImageView)vi.findViewById(R.id.imageView);
+//        TextView text=(TextView)vi.findViewById(R.id.textView);;
+//        ImageView image=(ImageView)vi.findViewById(R.id.imageView);
+        ImageView image=(ImageView)vi.findViewById(R.id.gridImage);
         Photo photo = photos.get(position);
 
        /* GeoData geoData= null;
@@ -82,7 +83,7 @@ public class LazyAdapter extends BaseAdapter {
             ImageDownloadTask task = new ImageDownloadTask(image);
             Drawable drawable = new ImageUtils.DownloadedDrawable(task);
             image.setImageDrawable(drawable);
-            task.execute(photo.getSmallSquareUrl());
+            task.execute(photo.getMediumUrl());
         }
 
 
