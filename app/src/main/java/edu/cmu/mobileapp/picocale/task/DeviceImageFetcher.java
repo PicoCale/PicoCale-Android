@@ -42,7 +42,7 @@ public class DeviceImageFetcher extends AsyncTask<String, Void, List<String>> {
         super.onPostExecute(locationList);
         progress.hide();
         gridView.setAdapter(new ImageGridAdapter(activity, locationList));
-        gridView.setOnItemClickListener(new GalleryItemClickListener(activity, locationList));
+        gridView.setOnItemClickListener(new GalleryItemClickListener(activity, locationList, 1));
     }
 
     @Override

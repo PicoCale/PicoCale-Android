@@ -74,24 +74,6 @@ public class CloudFragment extends android.support.v4.app.Fragment {
             Toast.makeText(getActivity().getApplicationContext(),getString(R.string.LoggedIn_Message),Toast.LENGTH_SHORT).show();
             load(oauth, gridView);
         }
-        location = LocationUtils.getCurrentLocation(getActivity());
-
-        //Obtains the current latitude and longitude
-        if(location !=null){
-            currentLatitude = location.getLatitude();
-            currentLongitude = location.getLongitude();
-        }
-        else
-        {
-            //To Display a toast message upon absence of GPS Provider
-            Context context = getActivity().getApplicationContext();
-            String toastMessageText = getResources().getString(R.string.GPSAbsent_Message);
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context,toastMessageText,duration);
-            toast.show();
-        }
-        Log.i("-->>/",Double.toString(currentLatitude));
-        Log.i("-->>/",Double.toString(currentLongitude));
         return rootView;
     }
 
@@ -149,8 +131,29 @@ public class CloudFragment extends android.support.v4.app.Fragment {
             {
                 Log.i("GridView", " not null");
             }
-//            Log.i("Oauth",oauth.getToken().toString());
-//            Log.i("Oauth",oauth.getToken().toString());
+
+            //Getting the current Location
+            location = LocationUtils.getCurrentLocation(getActivity());
+
+            //Obtains the current latitude and longitude
+            if(location !=null){
+                currentLatitude = location.getLatitude();
+                currentLongitude = location.getLongitude();
+            }
+            else
+            {
+                //To Display a toast message upon absence of GPS Provider
+                Context context = getActivity().getApplicationContext();
+                String toastMessageText = getResources().getString(R.string.GPSAbsent_Message);
+                int duration = Toast.LENGTH_LONG;
+                Toast toast = Toast.makeText(context,toastMessageText,duration);
+                toast.show();
+            }
+
+            Log.i("-->>/",Double.toString(currentLatitude));
+            Log.i("-->>/",Double.toString(currentLongitude));
+
+            //Loading the Flickr photo stream
             new LoadPhotoStreamTask(getActivity(),getActivity().getApplicationContext(),gridView,location,Double.parseDouble(radiusValue)).execute(oauth);
         }
     }
