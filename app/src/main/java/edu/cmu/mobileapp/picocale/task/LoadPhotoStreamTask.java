@@ -28,6 +28,7 @@ import org.json.JSONException;
 import java.util.HashSet;
 import java.util.Set;
 
+import edu.cmu.mobileapp.picocale.R;
 import edu.cmu.mobileapp.picocale.util.FlickrHelper;
 import edu.cmu.mobileapp.picocale.view.adapter.LazyAdapter;
 
@@ -83,8 +84,6 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
             //return f.getPeopleInterface().getPhotos(user.getId(), extras, 20, 1);
             PhotoList locationBasedList=new PhotoList();
             PhotoList photoList=f.getPeopleInterface().getPhotos(user.getId(), extras, 20, 1);
-            LocationManager locationManager=(LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             Log.i("Count",Integer.toString(photoList.size()));
             for(Photo photo:photoList)
             {
@@ -92,9 +91,6 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
                     try {
                         GeoData geoData = f.getGeoInterface().getLocation(photo.getId());
                         Log.i("Photo Lat:", Float.toString(geoData.getLatitude()));
-//                        Log.i("--------->",String.valueOf(location.getLatitude()));
-//                        double maxLatitude = location.getLatitude();
-//                        double minLat = location.getLatitude() - 1;
 //                        if (geoData.getLatitude() <= maxLatitude) {
                             Log.i("Photo ID Added:", photo.getId());
                             locationBasedList.add(photo);

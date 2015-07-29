@@ -1,19 +1,16 @@
 package edu.cmu.mobileapp.picocale.view.fragment;
 
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -24,10 +21,13 @@ import com.googlecode.flickrjandroid.people.User;
 
 import edu.cmu.mobileapp.picocale.task.GetOAuthTokenTask;
 import edu.cmu.mobileapp.picocale.task.LoadPhotoStreamTask;
+
 import java.util.Locale;
 
 import edu.cmu.mobileapp.picocale.R;
 import edu.cmu.mobileapp.picocale.task.OAuthTask;
+import edu.cmu.mobileapp.picocale.util.LocationUtils;
+import edu.cmu.mobileapp.picocale.util.NetworkUtils;
 
 /**
  * Created by srikrishnan_suresh on 25-07-2015.
@@ -41,7 +41,11 @@ public class CloudFragment extends android.support.v4.app.Fragment {
     public static final String KEY_USER_NAME = "flickrj-android-userName"; //$NON-NLS-1$
     public static final String KEY_USER_ID = "flickrj-android-userId"; //$NON-NLS-1$
     static final String PREF_KEY_LOGIN = "isLoggedIn";
+    LocationManager lm;
+    Location l;
     GridView gridView;
+    double currentLatitude,currentLongitude;
+    Criteria c;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,21 +54,47 @@ public class CloudFragment extends android.support.v4.app.Fragment {
 
         gridView=(GridView)rootView.findViewById(R.id.flickr_Grid);
 
+        //To Check for internet connectivity
+        if(!NetworkUtils.isOnline(getActivity())){
+            Toast.makeText(getActivity().getApplicationContext(),getString(R.string.NetworkAbsent_Message),Toast.LENGTH_LONG).show();
+        }
+
+        //Obtaining the authToken
         OAuth oauth = getOAuthToken();
 
-        if(!isLoggedInAlready()) {
 
-            Toast.makeText(getActivity().getApplicationContext(),"Not logged in",Toast.LENGTH_LONG).show();
+        if(!isLoggedInAlready()) {
+            //If the user is logged oin already
+            Toast.makeText(getActivity().getApplicationContext(),getString(R.string.NotLoggedIn_Message),Toast.LENGTH_LONG).show();
             if (oauth == null || oauth.getUser() == null) {
                 new OAuthTask(this,getActivity().getApplicationContext()).execute();
             }
         }
         else {
-            Toast.makeText(getActivity().getApplicationContext(),"Logged in",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity().getApplicationContext(),getString(R.string.LoggedIn_Message),Toast.LENGTH_SHORT).show();
             load(oauth,gridView);
         }
+        l= LocationUtils.getCurrentLocation(getActivity());
+
+        //Obtains the current latitude and longitude
+        if(l!=null){
+            currentLatitude = l.getLatitude();
+            currentLongitude = l.getLongitude();
+        }
+        else
+        {
+            //To Display a toast message upon absence of GPS Provider
+            Context context = getActivity().getApplicationContext();
+            String toastMessageText = getResources().getString(R.string.GPSAbsent_Message);
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context,toastMessageText,duration);
+            toast.show();
+        }
+        Log.i("-->>/",Double.toString(currentLatitude));
+        Log.i("-->>/",Double.toString(currentLongitude));
         return rootView;
     }
+
     /**
      * Check user already logged in your application using twitter Login flag is
      * fetched from Shared Preferences
@@ -91,14 +121,14 @@ public class CloudFragment extends android.support.v4.app.Fragment {
 
         if (userId != null) {
             User user = new User();
-            Log.i("User id",userId);
+//            Log.i("User id",userId);
             user.setUsername(userName);
             user.setId(userId);
             oauth.setUser(user);
         }
         else
         {
-            Log.i("User id:","null");
+//            Log.i("User id:","null");
         }
         OAuthToken oauthToken = new OAuthToken();
         oauth.setToken(oauthToken);
@@ -108,6 +138,9 @@ public class CloudFragment extends android.support.v4.app.Fragment {
     }
     //Loading the images
     private void load(OAuth oauth,GridView gridView) {
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("PicoCale", 0);
+        String radiusValue = sharedPref.getString("userRadius", "defaultRadius");
+        Boolean notificationval = sharedPref.getBoolean("notificationSetting",true);
         if (oauth != null) {
             if(gridView==null) {
                 Log.i("GridView", "null");
@@ -116,8 +149,8 @@ public class CloudFragment extends android.support.v4.app.Fragment {
             {
                 Log.i("GridView", " not null");
             }
-            Log.i("Oauth",oauth.getToken().toString());
-            Log.i("Oauth",oauth.getToken().toString());
+//            Log.i("Oauth",oauth.getToken().toString());
+//            Log.i("Oauth",oauth.getToken().toString());
             new LoadPhotoStreamTask(getActivity(),getActivity().getApplicationContext(),gridView).execute(oauth);
         }
     }
@@ -125,7 +158,7 @@ public class CloudFragment extends android.support.v4.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.i("On", "Resume!");
+//        Log.i("On", "Resume!");
         Intent intent = getActivity().getIntent();
         String scheme = intent.getScheme();
         OAuth savedToken = getOAuthToken();

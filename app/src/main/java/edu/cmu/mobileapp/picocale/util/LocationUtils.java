@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -35,5 +37,35 @@ public class LocationUtils {
 
         }
         return address;
+    }
+    /**
+     * Checks if GPS is on for the given manager
+     * */
+    public static boolean isGPSOn(LocationManager manager) {
+        if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            return true;
+        return false;
+    }
+
+    /**
+     *
+     * Fetches the current location of the user using the best (GPS/NETWORK) provider
+     */
+    public static Location getCurrentLocation(Activity activity){
+        LocationManager lm;
+        lm = (LocationManager)activity.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        List<String> providers = lm.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            Location location = lm.getLastKnownLocation(provider);
+            if (location == null) {
+                continue;
+            }
+            if (bestLocation == null || location.getAccuracy() < bestLocation.getAccuracy()) {
+                // Found best last known location: %s", location);
+                bestLocation = location;
+            }
+        }
+        return bestLocation;
     }
 }

@@ -1,8 +1,10 @@
 package edu.cmu.mobileapp.picocale.view.fragment;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     private Button saveButton;
     private Switch notificationSwitch;
     private EditText userRadiusText;
+    private SharedPreferences.Editor editor;
     SharedPreferences sharedPref;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,10 +40,12 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         //Listeners
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putFloat("userRadius", Float.parseFloat(userRadiusText.getText().toString()));
+//                sharedPref = PreferenceManager.getDefaultSharedPreferences();
+                sharedPref = getActivity().getSharedPreferences("PicoCale", 0);
+                editor = sharedPref.edit();
+                editor.putString("userRadius", userRadiusText.getText().toString());
                 editor.putBoolean("notificationSetting",notificationSwitch.isChecked());
+                editor.commit();
             }
         });
 
