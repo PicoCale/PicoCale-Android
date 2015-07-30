@@ -66,4 +66,9 @@ public class MainFragment extends Fragment {
         actionBar.addTab(cloudTab);
         actionBar.addTab(settingsTab);
     }
+    @Override
+    public void onResume() {
+        actionBar.setSelectedNavigationItem(2);
+        super.onResume();
+    }
 }

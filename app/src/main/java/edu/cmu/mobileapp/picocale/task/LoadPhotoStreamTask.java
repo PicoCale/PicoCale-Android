@@ -177,13 +177,12 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
             }
             gridView.setAdapter(adapter);
             gridView.setOnItemClickListener(new GalleryItemClickListener(activity, photoURLList, 2));
-            mProgressDialog.dismiss();
-
         }
         else
         {
             Toast.makeText(activity,"No photos available",Toast.LENGTH_LONG).show();
         }
+        mProgressDialog.dismiss();
     }
 
 }
