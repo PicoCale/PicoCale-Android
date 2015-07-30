@@ -21,7 +21,6 @@ public class DeviceImageFetcher extends AsyncTask<String, Void, List<String>> {
     private GridView gridView;
     private ProgressDialog progress;
     private ImageService imageService = new DeviceImageServiceImpl();
-
     public DeviceImageFetcher(Activity activity, GridView gridView) {
         this.activity = activity;
         this.gridView = gridView;
@@ -40,7 +39,12 @@ public class DeviceImageFetcher extends AsyncTask<String, Void, List<String>> {
     @Override
     protected List<String> doInBackground(String... params) {
         String location = params[0];
-        return imageService.getImageList(activity, location);
+        String type = params[1];
+        if(type.equals("1"))
+            return imageService.getImageList(activity, location);
+        else if(type.equals("2"))
+            return imageService.getLocationBasedImageList(activity);
+        return null;
     }
 
     @Override

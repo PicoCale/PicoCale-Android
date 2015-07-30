@@ -37,10 +37,11 @@ public class GalleryFragment extends Fragment {
 
         Intent intent = activity.getIntent();
         String locationString = intent.getStringExtra("location");
+        String type = "1";
         ((ActionBarActivity)activity).getSupportActionBar().setDisplayShowTitleEnabled(true);
         ((ActionBarActivity)activity).getSupportActionBar().setTitle(R.string.app_name);
         ((ActionBarActivity)activity).getSupportActionBar().setSubtitle(locationString);
-        new DeviceImageFetcher(activity,gridView).execute(locationString);
+        new DeviceImageFetcher(activity,gridView).execute(locationString,type);
         return view;
     }
 

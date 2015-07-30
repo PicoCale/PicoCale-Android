@@ -82,11 +82,6 @@ public class LocationService extends Service {
         mNM.notify(R.string.app_name, notification);
     }
 
-//    protected void onHandleIntent(Intent intent) {
-//        isImageAvailable = intent.getBooleanExtra("isImageAvailable",isImageAvailable);
-//        Log.i("---BOOL3AVL-->", isImageAvailable.toString());
-//    }
-
     @Override
     public IBinder onBind(Intent intent) {
         return null;
