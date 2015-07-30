@@ -5,13 +5,16 @@
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Notifications ON/OFF"
+        android:text="Notifications"
         android:id="@+id/notificationSwitch"
         android:checked="false"
-        android:layout_above="@+id/userRadiusValue"
-        android:layout_alignLeft="@+id/radiusView"
-        android:layout_alignStart="@+id/radiusView"
-        android:layout_marginBottom="30dp" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textColor="@android:color/background_dark" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -19,28 +22,30 @@
         android:inputType="number"
         android:ems="10"
         android:id="@+id/userRadiusValue"
-        android:hint="5 miles"
-        android:layout_centerVertical="true"
+        android:hint="5"
+        android:layout_alignBottom="@+id/radiusView"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Radius"
+        android:text="Radius (miles)"
         android:id="@+id/radiusView"
-        android:layout_alignBottom="@+id/userRadiusValue"
-        android:layout_toLeftOf="@+id/userRadiusValue"
-        android:layout_toStartOf="@+id/userRadiusValue"
-        android:layout_marginRight="38dp"
-        android:layout_marginEnd="38dp" />
+        android:layout_below="@+id/notificationSwitch"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="28dp"
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textColor="@android:color/background_dark" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SAVE"
+        android:text="Save"
         android:id="@+id/saveButton"
+        android:layout_marginTop="78dp"
         android:layout_below="@+id/userRadiusValue"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="62dp" />
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
