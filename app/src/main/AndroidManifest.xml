@@ -27,7 +27,20 @@
         </activity>
         <activity android:name=".view.activity.ViewImageActivity" >
         </activity>
+        <service android:name="edu.cmu.mobileapp.picocale.service.LocationService">
+            <intent-filter>
+                <action android:name="edu.cmu.mobileapp.picocale.service.LocationService" />
+            </intent-filter>
+        </service>
+
+        <!-- Declaring broadcast receiver for BOOT_COMPLETED event. -->
+        <receiver android:name="edu.cmu.mobileapp.picocale.receiver.BootReceiver" android:enabled="true" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />

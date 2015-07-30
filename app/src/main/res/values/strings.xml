@@ -9,5 +9,6 @@
     <string name="NotLoggedIn_Message">Not logged In</string>
     <string name="authorizationSuccess">Authorization Succeeded!</string>
     <string name="authorizationFail">Authorization Failed!</string>
-
+    <string name="local_service_started">\"Yeah\"</string>
+    <string name="service_name">Notification</string>
 </resources>
