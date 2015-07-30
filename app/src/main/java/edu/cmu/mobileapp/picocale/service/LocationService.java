@@ -30,7 +30,8 @@ public class LocationService extends Service {
     private NotificationManager mNM;
     Intent intent;
     int counter = 0;
-
+    Boolean isImageAvailable = false;
+    int imageCount = 0;
     @Override
     public void onCreate()
     {
@@ -46,7 +47,7 @@ public class LocationService extends Service {
     @Override
     public void onStart(Intent intent, int startId)
     {
-        Log.i("->>Service started","Yes");
+        Log.i("->>Service started", "Yes");
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         listener = new MyLocationListener();
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
@@ -57,7 +58,9 @@ public class LocationService extends Service {
     private void showNotification() {
         // In this sample, we'll use the same text for the ticker and the
         // expanded notification
-        CharSequence text = getText(R.string.local_service_started);
+//        CharSequence text = getText(R.string.local_service_started);
+//        CharSequence text = getText(R.string.service_notification_1)+" "+Integer.valueOf(imageCount).toString()+" "+getText(R.string.service_notification_2);
+        CharSequence text = getText(R.string.service_notification_1)+" "+getText(R.string.service_notification_2);
         Log.i("Text",text.toString());
 
         // Set the icon, scrolling text and timestamp
@@ -76,10 +79,13 @@ public class LocationService extends Service {
         // Send the notification.
         // We use a layout id because it is a unique number. We use it later to
         // cancel.
-        mNM.notify(R.string.local_service_started, notification);
-
+        mNM.notify(R.string.app_name, notification);
     }
 
+//    protected void onHandleIntent(Intent intent) {
+//        isImageAvailable = intent.getBooleanExtra("isImageAvailable",isImageAvailable);
+//        Log.i("---BOOL3AVL-->", isImageAvailable.toString());
+//    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -115,7 +121,9 @@ public class LocationService extends Service {
     public class MyLocationListener implements LocationListener {
 
         public void onLocationChanged(final Location loc) {
+
             Log.i("*********", "Location changed");
+
             // if (isBetterLocation(loc, previousBestLocation)) {
             loc.getLatitude();
             loc.getLongitude();
@@ -123,16 +131,17 @@ public class LocationService extends Service {
             intent.putExtra("Latitude", loc.getLatitude());
             intent.putExtra("Longitude", loc.getLongitude());
             intent.putExtra("Provider", loc.getProvider());
-            showNotification();
-            sendBroadcast(intent);
 
+            //checking for any device images within the current radius boundary
+            if(isImageAvailable)
+                showNotification();
+            sendBroadcast(intent);
             //}
         }
 
         public void onProviderDisabled(String provider) {
             Toast.makeText(getApplicationContext(), "Gps Disabled", Toast.LENGTH_SHORT).show();
         }
-
 
         public void onProviderEnabled(String provider) {
             Toast.makeText(getApplicationContext(), "Gps Enabled", Toast.LENGTH_SHORT).show();
@@ -219,6 +228,11 @@ public class LocationService extends Service {
         // cancel.
         mNM.notify(R.string.local_service_started, notification);
 */
+        if(intent!=null) {
+            isImageAvailable = intent.getBooleanExtra("isImageAvailable", false);
+            imageCount = intent.getIntExtra("imageCount", 0);
+            Log.i("---BOOL3AVL-->", isImageAvailable.toString());
+        }
         return super.onStartCommand(intent,flags,startId);
     }
 }
