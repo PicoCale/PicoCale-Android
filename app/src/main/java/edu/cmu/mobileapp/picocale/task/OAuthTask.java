@@ -47,9 +47,6 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-//        mProgressDialog = ProgressDialog.show(mContext,
-               // "", "Generating the authorization request..."); //$NON-NLS-1$ //$NON-NLS-2$
-        //mProgressDialog.setCanceledOnTouchOutside(true);
     }
 
     /*

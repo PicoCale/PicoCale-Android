@@ -1,10 +1,7 @@
 package edu.cmu.mobileapp.picocale.view.fragment;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,25 +20,29 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     private Switch notificationSwitch;
     private EditText userRadiusText;
     private SharedPreferences.Editor editor;
+    private String userRadiusSettingValue;
+    private boolean notificationSettingValue;
     SharedPreferences sharedPref;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //initialisations
         View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
+        sharedPref = getActivity().getSharedPreferences("PicoCale", 0);
         saveButton = (Button) rootView.findViewById(R.id.saveButton);
         notificationSwitch = (Switch) rootView.findViewById(R.id.notificationSwitch);
         userRadiusText = (EditText) rootView.findViewById(R.id.userRadiusValue);
 
         //default values
-        notificationSwitch.setChecked(true);
-        userRadiusText.setText("5");
+        notificationSettingValue = sharedPref.getBoolean("notificationSetting",true);
+        notificationSwitch.setChecked(notificationSettingValue);
+        userRadiusSettingValue = sharedPref.getString("userRadius","5");
+        userRadiusText.setText(userRadiusSettingValue);
 
         //Listeners
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 //                sharedPref = PreferenceManager.getDefaultSharedPreferences();
-                sharedPref = getActivity().getSharedPreferences("PicoCale", 0);
                 editor = sharedPref.edit();
                 editor.putString("userRadius", userRadiusText.getText().toString());
                 editor.putBoolean("notificationSetting",notificationSwitch.isChecked());

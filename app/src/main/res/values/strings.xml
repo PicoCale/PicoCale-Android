@@ -7,5 +7,7 @@
     <string name="NetworkAbsent_Message">GPS Absent!</string>
     <string name="LoggedIn_Message">Logged In</string>
     <string name="NotLoggedIn_Message">Not logged In</string>
+    <string name="authorizationSuccess">Authorization Succeeded!</string>
+    <string name="authorizationFail">Authorization Failed!</string>
 
 </resources>

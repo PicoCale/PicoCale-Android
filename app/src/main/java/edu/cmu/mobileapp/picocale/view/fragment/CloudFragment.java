@@ -121,7 +121,7 @@ public class CloudFragment extends android.support.v4.app.Fragment {
     //Loading the images
     private void load(OAuth oauth,GridView gridView) {
         SharedPreferences sharedPref = getActivity().getSharedPreferences("PicoCale", 0);
-        String radiusValue = sharedPref.getString("userRadius", "defaultRadius");
+        String radiusValue = sharedPref.getString("userRadius", "5");
 //        Boolean notificationval = sharedPref.getBoolean("notificationSetting",true);
         if (oauth != null) {
             if(gridView==null) {
@@ -150,8 +150,8 @@ public class CloudFragment extends android.support.v4.app.Fragment {
                 toast.show();
             }
 
-            Log.i("-->>/",Double.toString(currentLatitude));
-            Log.i("-->>/",Double.toString(currentLongitude));
+//            Log.i("-->>/",Double.toString(currentLatitude));
+//            Log.i("-->>/",Double.toString(currentLongitude));
 
             //Loading the Flickr photo stream
             new LoadPhotoStreamTask(getActivity(),getActivity().getApplicationContext(),gridView,location,Double.parseDouble(radiusValue)).execute(oauth);
@@ -184,7 +184,6 @@ public class CloudFragment extends android.support.v4.app.Fragment {
     }
 
     public void saveOAuthToken(String userName, String userId, String token, String tokenSecret) {
-
         SharedPreferences sp = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(KEY_OAUTH_TOKEN, token);
@@ -196,17 +195,17 @@ public class CloudFragment extends android.support.v4.app.Fragment {
     }
 
     public void onOAuthDone(OAuth result) {
-        Log.i("OAD","called");
         if (result == null) {
-            Toast.makeText(getActivity().getApplicationContext(), "Authorization failed",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.authorizationFail),Toast.LENGTH_LONG).show();
         } else {
             User user = result.getUser();
             OAuthToken token = result.getToken();
             if (user == null || user.getId() == null || token == null || token.getOauthToken() == null || token.getOauthTokenSecret() == null) {
-                Toast.makeText(getActivity().getApplicationContext(), "Authorization failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.authorizationFail), Toast.LENGTH_LONG).show();
                 return;
             }
-            String message = String.format(Locale.US, "Authorization Succeed: user=%s, userId=%s, oauthToken=%s, tokenSecret=%s",user.getUsername(), user.getId(), token.getOauthToken(), token.getOauthTokenSecret());
+//            String message = String.format(Locale.US, "Authorization Succeed: user=%s, userId=%s, oauthToken=%s, tokenSecret=%s",user.getUsername(), user.getId(), token.getOauthToken(), token.getOauthTokenSecret());
+            String message = getString(R.string.authorizationSuccess);
             Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_LONG).show();
             saveOAuthToken(user.getUsername(), user.getId(), token.getOauthToken(), token.getOauthTokenSecret());
             load(result,gridView);

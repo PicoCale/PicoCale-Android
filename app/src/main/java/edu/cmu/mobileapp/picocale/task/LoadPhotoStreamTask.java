@@ -87,7 +87,7 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
                 token.getOauthTokenSecret());
         oauthToken=token.getOauthToken();
         oauthTokenSecret=token.getOauthTokenSecret();
-        Log.i("Token Secret", token.getOauthTokenSecret());
+//        Log.i("Token Secret", token.getOauthTokenSecret());
         Set<String> extras = new HashSet<String>();
         extras.add("url_sq"); //$NON-NLS-1$
         extras.add("url_l"); //$NON-NLS-1$
@@ -113,7 +113,7 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
             photoURLList = new ArrayList<String>();
             PhotoList locationBasedList=new PhotoList();
             PhotoList photoList=f.getPeopleInterface().getPhotos(user.getId(), extras, 20, 1);
-            Log.i("===Count",Integer.toString(photoList.size()));
+//            Log.i("===Count",Integer.toString(photoList.size()));
             for(Photo photo:photoList)
             {
                 if(photo!=null) {
@@ -123,19 +123,19 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
                         photoLongitude = geoData.getLongitude();
 
                         //printing out the values
-                        Log.i("===>Photo Lat:", Double.toString(photoLatitude));
+                        /*Log.i("===>Photo Lat:", Double.toString(photoLatitude));
                         Log.i("===>Photo Lon:", Double.toString(photoLongitude));
                         Log.i("===>Min Lat:", Double.toString(minLatitude));
                         Log.i("===>Max Lat:", Double.toString(maxLatitude));
                         Log.i("===>Min Lon:", Double.toString(minLongitude));
-                        Log.i("===>Max Lon:", Double.toString(maxLongitude));
+                        Log.i("===>Max Lon:", Double.toString(maxLongitude));*/
 
                         //Deciding whether to display image or not
                         if ((photoLatitude >=minLatitude && photoLatitude <= maxLatitude) &&
                                 (photoLongitude <=minLongitude && photoLongitude>=maxLongitude)){
                             Log.i("Photo ID Added:", photo.getId());
                             locationBasedList.add(photo);
-                            photoURLList.add(photo.getLarge1600Url());
+                            photoURLList.add(photo.getLargeUrl());
                         }
                         else{
                             Log.i("Sry!Photo ID Not Added:", photo.getId());
@@ -165,7 +165,7 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
     @Override
     protected void onPostExecute(PhotoList result) {
         if (result != null) {
-            Log.i("Size:",Integer.toString(result.size()));
+//            Log.i("Size:",Integer.toString(result.size()));
             LazyAdapter adapter = new LazyAdapter(context, result,oauthToken,oauthTokenSecret);
             if(gridView==null)
             {

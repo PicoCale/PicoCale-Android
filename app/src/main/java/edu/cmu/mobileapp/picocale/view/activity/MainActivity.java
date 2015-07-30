@@ -36,7 +36,6 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -49,7 +48,6 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onResume() {
-
         super.onResume();
     }
 }
