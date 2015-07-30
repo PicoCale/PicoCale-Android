@@ -38,16 +38,16 @@ public class DeviceImageFetcher extends AsyncTask<String, Void, List<String>> {
     }
 
     @Override
+    protected List<String> doInBackground(String... params) {
+        String location = params[0];
+        return imageService.getImageList(activity, location);
+    }
+
+    @Override
     protected void onPostExecute(List<String> locationList) {
         super.onPostExecute(locationList);
         progress.hide();
         gridView.setAdapter(new ImageGridAdapter(activity, locationList));
         gridView.setOnItemClickListener(new GalleryItemClickListener(activity, locationList, 1));
-    }
-
-    @Override
-    protected List<String> doInBackground(String... params) {
-        String location = params[0];
-        return imageService.getImageList(activity, location);
     }
 }

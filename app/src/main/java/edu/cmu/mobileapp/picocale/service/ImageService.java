@@ -1,6 +1,7 @@
 package edu.cmu.mobileapp.picocale.service;
 
 import android.app.Activity;
+import android.location.Location;
 
 import java.util.List;
 
@@ -9,4 +10,5 @@ import java.util.List;
  */
 public interface ImageService {
     public List<String> getImageList(Activity activity, String location);
+    public List<String> getLocationBasedImageList(Activity activity);
 }

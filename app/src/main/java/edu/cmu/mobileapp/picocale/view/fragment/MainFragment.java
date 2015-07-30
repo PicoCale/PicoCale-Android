@@ -68,7 +68,7 @@ public class MainFragment extends Fragment {
     }
     @Override
     public void onResume() {
-        actionBar.setSelectedNavigationItem(2);
+//        actionBar.setSelectedNavigationItem(2);
         super.onResume();
     }
 }
