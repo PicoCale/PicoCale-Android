@@ -3,14 +3,60 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:id="@+id/tweet_preview_image"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="39dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tweet_message"
+        android:text="tweet message"
+        android:visibility="visible"
+        android:layout_marginTop="44dp"
+        android:layout_below="@+id/tweet_preview_image"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Post"
+        android:id="@+id/confirm_tweet_button"
+        android:layout_marginBottom="33dp"
+        android:background="@android:color/transparent"
+        android:textColor="#ff0d00ff"
+        android:textSize="@dimen/abc_text_size_large_material"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/icon_twit"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/icon_twitter" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Twitter"
-        android:id="@+id/textView"
-        android:layout_gravity="center_horizontal"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="102dp" />
+        android:text="\@PicoCaleApp"
+        android:id="@+id/user_handler_name"
+        android:layout_marginLeft="7dp"
+        android:layout_marginStart="7dp"
+        android:layout_alignBottom="@+id/icon_twit"
+        android:layout_toRightOf="@+id/icon_twit"
+        android:layout_toEndOf="@+id/icon_twit" />
+
 </RelativeLayout>
