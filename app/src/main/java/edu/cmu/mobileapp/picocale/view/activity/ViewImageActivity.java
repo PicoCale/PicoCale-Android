@@ -3,6 +3,7 @@ package edu.cmu.mobileapp.picocale.view.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -11,11 +12,13 @@ import edu.cmu.mobileapp.picocale.R;
 /**
  * Created by srikrishnan_suresh on 07/27/2015.
  */
-public class ViewImageActivity extends FragmentActivity {
+public class ViewImageActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_image);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().show();
     }
 
     @Override
@@ -27,16 +30,13 @@ public class ViewImageActivity extends FragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; goto parent activity.
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }
