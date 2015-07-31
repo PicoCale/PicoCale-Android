@@ -6,6 +6,9 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -62,6 +65,29 @@ public class ViewImageFragment extends android.support.v4.app.Fragment {
             Log.i("-URL--->", imageURL);
             new LoadImageTask(getActivity(),imageView).execute(imageURL);
         }
+
+        setHasOptionsMenu(true);
         return rootView;
+    }
+    @Override
+    public void  onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_view_image, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; goto parent activity.
+                this.getActivity().finish();
+                return true;
+            case R.id.tweet_image:
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
