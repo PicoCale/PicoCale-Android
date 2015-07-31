@@ -71,7 +71,7 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
     protected void onPreExecute() {
         super.onPreExecute();
         mProgressDialog = ProgressDialog.show(activity,
-                "", "Please wait..."); //$NON-NLS-1$ //$NON-NLS-2$
+                "", activity.getString(R.string.progressLoadingText)); //$NON-NLS-1$ //$NON-NLS-2$
         mProgressDialog.setCanceledOnTouchOutside(true);
     }
 

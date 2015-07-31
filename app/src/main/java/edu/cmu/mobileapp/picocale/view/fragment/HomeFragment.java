@@ -18,7 +18,6 @@ import edu.cmu.mobileapp.picocale.task.DeviceImageFetcher;
  * Created by srikrishnan_suresh on 25-07-2015.
  */
 public class HomeFragment extends android.support.v4.app.Fragment {
-
     List<String> imagesWithinBoundary;
     GridView gridView;
     @Override

@@ -16,4 +16,5 @@
     <string name="alertDialogMessage">would like to access your Flickr account</string>
     <string name="alertDialogButtonAllow">Allow</string>
     <string name="alertDialogButtonDontAllow">Don\'t Allow</string>
+    <string name="progressLoadingText">Loading...</string>
 </resources>

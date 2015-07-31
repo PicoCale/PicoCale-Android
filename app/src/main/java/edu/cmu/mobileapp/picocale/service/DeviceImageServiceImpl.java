@@ -65,7 +65,7 @@ public class DeviceImageServiceImpl implements ImageService {
         double minLatitude, maxLatitude;
         double minLongitude, maxLongitude;
         double latitudeCorrectionFactor, longitudeCorrectionFactor;
-        double currentLatitude, currentLongitude;
+        double currentLatitude = 0, currentLongitude = 0;
         double radiusValue;
         int imageCount = 0;
         String imagePath;
@@ -89,9 +89,11 @@ public class DeviceImageServiceImpl implements ImageService {
         //Getting the current Location
         Location location = LocationUtils.getCurrentLocation(activity);
 
-        //Getting the current latitude and longitude
-        currentLatitude = location.getLatitude();
-        currentLongitude = location.getLongitude();
+        if(location!=null) {
+            //Getting the current latitude and longitude
+            currentLatitude = location.getLatitude();
+            currentLongitude = location.getLongitude();
+        }
         Log.i("---BOOLAT-->", Double.valueOf(currentLatitude).toString());
         Log.i("---BOOLON-->", Double.valueOf(currentLongitude).toString());
         //Getting the radius value from the preferences
@@ -125,7 +127,7 @@ public class DeviceImageServiceImpl implements ImageService {
                 imageList.add(imagePath);
             }
         }
-        Log.i("---BOOLCOUNT-->", Double.valueOf(imageCount).toString());
+//        Log.i("---BOOLCOUNT-->", Double.valueOf(imageCount).toString());
         //returning the location based image list
         return imageList;
     }
