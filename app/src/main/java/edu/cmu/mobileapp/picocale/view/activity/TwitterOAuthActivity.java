@@ -55,6 +55,7 @@ public class TwitterOAuthActivity extends ActionBarActivity {
     private String userName="";
 
     private ImageView previewImage;
+    private ImageView iconTwitter;
     private EditText tweetMessage;
     private TextView handlerName;
     private Button confirmTweetButton;
@@ -97,6 +98,7 @@ public class TwitterOAuthActivity extends ActionBarActivity {
         tweetMessage = (EditText) findViewById(R.id.tweet_message);
         confirmTweetButton = (Button) findViewById(R.id.confirm_tweet_button);
         handlerName = (TextView) findViewById(R.id.user_handler_name);
+        iconTwitter = (ImageView)findViewById(R.id.icon_twit);
 
         tweetStatus = "Sent using @PicoCale";
         tweetMessage.setText(tweetStatus);
@@ -140,10 +142,12 @@ public class TwitterOAuthActivity extends ActionBarActivity {
 
     private void showComponents() {
         previewImage.setVisibility(View.VISIBLE);
+        iconTwitter.setVisibility(View.VISIBLE);
         tweetMessage.setVisibility(View.VISIBLE);
         confirmTweetButton.setVisibility(View.VISIBLE);
         confirmTweetButton.setOnClickListener(null);
-        handlerName.setText("@"+pref.getString("SCREEN_NAME",""));
+        handlerName.setVisibility(View.VISIBLE);
+        handlerName.setText("@" + pref.getString("SCREEN_NAME",""));
         //confirmTweetButton.setOnClickListener(new ConfirmTweetListener(this, tweetStatus, filePath, mediaType));
     }
 
