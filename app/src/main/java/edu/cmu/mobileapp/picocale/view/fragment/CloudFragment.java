@@ -24,8 +24,6 @@ import com.googlecode.flickrjandroid.people.User;
 import edu.cmu.mobileapp.picocale.task.GetOAuthTokenTask;
 import edu.cmu.mobileapp.picocale.task.LoadPhotoStreamTask;
 
-import java.util.Locale;
-
 import edu.cmu.mobileapp.picocale.R;
 import edu.cmu.mobileapp.picocale.task.OAuthTask;
 import edu.cmu.mobileapp.picocale.util.LocationUtils;

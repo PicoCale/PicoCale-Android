@@ -27,6 +27,8 @@
         </activity>
         <activity android:name=".view.activity.ViewImageActivity" >
         </activity>
+        <activity android:name=".view.activity.TwitterOAuthActivity" >
+        </activity>
         <service android:name="edu.cmu.mobileapp.picocale.service.LocationService">
             <intent-filter>
                 <action android:name="edu.cmu.mobileapp.picocale.service.LocationService" />

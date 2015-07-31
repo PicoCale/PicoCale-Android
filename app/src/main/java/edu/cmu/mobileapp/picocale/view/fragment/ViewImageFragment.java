@@ -1,6 +1,8 @@
 package edu.cmu.mobileapp.picocale.view.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -20,11 +22,16 @@ import java.net.URL;
 import edu.cmu.mobileapp.picocale.R;
 import edu.cmu.mobileapp.picocale.task.LoadImageTask;
 import edu.cmu.mobileapp.picocale.util.FlushedInputStream;
+import edu.cmu.mobileapp.picocale.util.TwitterOAuthUtils;
+import edu.cmu.mobileapp.picocale.view.activity.TwitterOAuthActivity;
 
 /**
  * Created by srikrishnan_suresh on 07/27/2015.
  */
 public class ViewImageFragment extends android.support.v4.app.Fragment {
+    private SharedPreferences preference;
+    String imagePath;
+    String imageURL;
     private static Bitmap downloadBitmap(String stringUrl) {
         URL url = null;
         HttpURLConnection connection = null;
@@ -53,8 +60,8 @@ public class ViewImageFragment extends android.support.v4.app.Fragment {
 
         Intent i = getActivity().getIntent();
 
-        String imagePath = i.getStringExtra("imagePath");
-        String imageURL = i.getStringExtra("imageURL");
+        imagePath = i.getStringExtra("imagePath");
+        imageURL = i.getStringExtra("imageURL");
         ImageView imageView = (ImageView) rootView.findViewById(R.id.full_image_view);
 
         if(imagePath!=null) {
@@ -80,11 +87,16 @@ public class ViewImageFragment extends android.support.v4.app.Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // app icon in action bar clicked; goto parent activity.
                 this.getActivity().finish();
                 return true;
             case R.id.tweet_image:
-
+                Activity activity = getActivity();
+                preference=activity.getApplicationContext().getSharedPreferences("MyPref", 0);
+                TwitterOAuthUtils.setInitPreferences(preference);
+                Intent twitterIntent = new Intent(activity.getApplicationContext(), TwitterOAuthActivity.class);
+                twitterIntent.putExtra("imagePath",imagePath);
+                twitterIntent.putExtra("imageURL",imageURL);
+                activity.startActivity(twitterIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
