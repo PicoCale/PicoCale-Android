@@ -12,4 +12,8 @@
     <string name="service_notification_1">You have taken </string>
     <string name="service_notification_2">photos here!! Click here to view</string>
     <string name="service_name">PicoCale</string>
+    <string name="alertDialogTitle">Request Flickr Access</string>
+    <string name="alertDialogMessage">would like to access your Flickr account</string>
+    <string name="alertDialogButtonAllow">Allow</string>
+    <string name="alertDialogButtonDontAllow">Don\'t Allow</string>
 </resources>
