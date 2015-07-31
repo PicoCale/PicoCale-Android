@@ -1,5 +1,7 @@
 package edu.cmu.mobileapp.picocale.view.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -59,19 +61,43 @@ public class CloudFragment extends android.support.v4.app.Fragment {
             Toast.makeText(getActivity().getApplicationContext(),getString(R.string.NetworkAbsent_Message),Toast.LENGTH_LONG).show();
         }
 
-        //Obtaining the authToken
-        OAuth oauth = getOAuthToken();
+        //Displaying the alert dialog box for the user
+        //to tell about privacy setting
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
 
+        // set title
+        alertDialogBuilder.setTitle(getString(R.string.alertDialogTitle));
 
         if(!isLoggedInAlready()) {
-            //If the user is logged oin already
-            Toast.makeText(getActivity().getApplicationContext(),getString(R.string.NotLoggedIn_Message),Toast.LENGTH_LONG).show();
-            if (oauth == null || oauth.getUser() == null) {
-                new OAuthTask(this,getActivity().getApplicationContext()).execute();
-            }
+            // Getting user permission for
+            alertDialogBuilder
+                    .setMessage(getString(R.string.app_name)+" "+getString(R.string.alertDialogMessage))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.alertDialogButtonAllow), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if this button is clicked, proceed to flickr auth
+                            //Obtaining the authToken
+                            OAuth oauth = getOAuthToken();
+                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.NotLoggedIn_Message), Toast.LENGTH_LONG).show();
+                            if (oauth == null || oauth.getUser() == null) {
+                                new OAuthTask(CloudFragment.this, getActivity().getApplicationContext()).execute();
+                            }
+                        }
+                    });
+                    alertDialogBuilder.setNegativeButton(getString(R.string.alertDialogButtonDontAllow), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if this button is clicked, just close
+                            // the dialog box and do nothing
+                            dialog.cancel();
+                        }
+                    });
+            // create alert dialog
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
         else {
-            Toast.makeText(getActivity().getApplicationContext(),getString(R.string.LoggedIn_Message),Toast.LENGTH_SHORT).show();
+            OAuth oauth = getOAuthToken();
+            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.LoggedIn_Message), Toast.LENGTH_SHORT).show();
             load(oauth, gridView);
         }
         return rootView;
@@ -190,7 +216,9 @@ public class CloudFragment extends android.support.v4.app.Fragment {
         editor.putString(KEY_TOKEN_SECRET, tokenSecret);
         editor.putString(KEY_USER_NAME, userName);
         editor.putString(KEY_USER_ID, userId);
-        editor.putBoolean(PREF_KEY_LOGIN, true);
+        if(userId!=null) {
+            editor.putBoolean(PREF_KEY_LOGIN, true);
+        }
         editor.commit();
     }
 
