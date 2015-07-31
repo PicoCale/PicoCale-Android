@@ -1,10 +1,12 @@
 package edu.cmu.mobileapp.picocale.view.fragment;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -27,7 +29,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //initialisations
-        View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
         sharedPref = getActivity().getSharedPreferences("PicoCale", 0);
         saveButton = (Button) rootView.findViewById(R.id.saveButton);
         notificationSwitch = (Switch) rootView.findViewById(R.id.notificationSwitch);
@@ -47,6 +49,10 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
                 editor.putString("userRadius", userRadiusText.getText().toString());
                 editor.putBoolean("notificationSetting",notificationSwitch.isChecked());
                 editor.commit();
+                if (rootView != null) {
+                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
+                }
             }
         });
 
