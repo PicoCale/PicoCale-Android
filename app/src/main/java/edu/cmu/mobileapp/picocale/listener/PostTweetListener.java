@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import edu.cmu.mobileapp.picocale.model.PicoCaleImage;
 import edu.cmu.mobileapp.picocale.task.UpdateTwitterStatusTask;
 import edu.cmu.mobileapp.picocale.view.activity.TwitterOAuthActivity;
 
@@ -15,19 +16,19 @@ import edu.cmu.mobileapp.picocale.view.activity.TwitterOAuthActivity;
 public class PostTweetListener implements View.OnClickListener {
     private Activity activity;
     private EditText text;
-    private String imagePath;
     private AsyncTask<String,String,String> task;
+    public  PicoCaleImage picoCaleImage;
 
-    public PostTweetListener(Activity twitterOAuthActivity, EditText text, String imagePath) {
+    public PostTweetListener(Activity twitterOAuthActivity, EditText text, PicoCaleImage picoCaleImage) {
         this.activity = twitterOAuthActivity;
         this.text = text;
-        this.imagePath = imagePath;
+        this.picoCaleImage=picoCaleImage;
         this.task = new UpdateTwitterStatusTask(activity);
     }
 
     @Override
     public void onClick(View v) {
         String tweetStatus = String.valueOf(text.getText());
-        task.execute(tweetStatus, imagePath);
+        task.execute(tweetStatus,picoCaleImage.getFilePath(),Double.toString(picoCaleImage.getLatitude()),Double.toString(picoCaleImage.getLongitude()));
     }
 }

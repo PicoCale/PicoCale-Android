@@ -31,7 +31,9 @@ import java.util.List;
 import java.util.Set;
 
 import edu.cmu.mobileapp.picocale.R;
+import edu.cmu.mobileapp.picocale.constants.PicoCaleImageConstants;
 import edu.cmu.mobileapp.picocale.listener.GalleryItemClickListener;
+import edu.cmu.mobileapp.picocale.model.PicoCaleImage;
 import edu.cmu.mobileapp.picocale.util.DistanceUtils;
 import edu.cmu.mobileapp.picocale.util.FlickrHelper;
 import edu.cmu.mobileapp.picocale.view.adapter.LazyAdapter;
@@ -52,7 +54,8 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
     double minLongitude, maxLongitude;
     double radiusValue;
     double photoLatitude, photoLongitude;
-    List<String> photoURLList;
+    List<PicoCaleImage> photoURLList=new ArrayList<PicoCaleImage>();
+    public PicoCaleImage picoCaleImage;
 
     public LoadPhotoStreamTask(Activity activity,Context context, GridView gridView, Location pLocation,double pRadiusValue) {
         this.activity = activity;
@@ -110,7 +113,7 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
 
             //Getting the list of photos
             //return f.getPeopleInterface().getPhotos(user.getId(), extras, 20, 1);
-            photoURLList = new ArrayList<String>();
+            //photoURLList = new ArrayList<String>();
             PhotoList locationBasedList=new PhotoList();
             PhotoList photoList=f.getPeopleInterface().getPhotos(user.getId(), extras, 20, 1);
 //            Log.i("===Count",Integer.toString(photoList.size()));
@@ -135,7 +138,9 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
                                 (photoLongitude <=minLongitude && photoLongitude>=maxLongitude)){
                             Log.i("Photo ID Added:", photo.getId());
                             locationBasedList.add(photo);
-                            photoURLList.add(photo.getLargeUrl());
+                            //photoURLList.add(photo.getLargeUrl());
+                            picoCaleImage=new PicoCaleImage(photo.getLargeUrl(), PicoCaleImageConstants.URL_IMAGE,photoLatitude,photoLongitude);
+                            photoURLList.add(picoCaleImage);
                         }
                         else{
                             Log.i("Sry!Photo ID Not Added:", photo.getId());
@@ -176,7 +181,7 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
                 Log.i("Adapter","null");
             }
             gridView.setAdapter(adapter);
-            gridView.setOnItemClickListener(new GalleryItemClickListener(activity, photoURLList, 2));
+            gridView.setOnItemClickListener(new GalleryItemClickListener(activity,photoURLList, 2));
         }
         else
         {

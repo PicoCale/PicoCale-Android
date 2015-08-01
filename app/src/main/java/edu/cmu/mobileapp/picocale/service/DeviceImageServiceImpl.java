@@ -5,14 +5,20 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Location;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
+import edu.cmu.mobileapp.picocale.constants.PicoCaleImageConstants;
+import edu.cmu.mobileapp.picocale.model.PicoCaleImage;
 import edu.cmu.mobileapp.picocale.util.DistanceUtils;
 import edu.cmu.mobileapp.picocale.util.LocationUtils;
 
@@ -20,8 +26,11 @@ import edu.cmu.mobileapp.picocale.util.LocationUtils;
  * Created by srikrishnan_suresh on 07/26/2015.
  */
 public class DeviceImageServiceImpl implements ImageService {
+
+    public PicoCaleImage picoCaleImage;
+
     @Override
-    public List<String> getImageList(Activity activity, String requiredLocation) {
+    public List<PicoCaleImage> getImageList(Activity activity, String requiredLocation) {
         List<String> imageList = new ArrayList<String>();
         String[] columns = {
                 MediaStore.Images.ImageColumns.DATA,
@@ -38,6 +47,8 @@ public class DeviceImageServiceImpl implements ImageService {
                 orderBy
         );
 
+        List<PicoCaleImage> picoCaleImageList=new ArrayList<PicoCaleImage>();
+
         int count = cursor.getCount();
         Double latitude, longitude;
         LatLng latLng = null;
@@ -52,14 +63,17 @@ public class DeviceImageServiceImpl implements ImageService {
                 location = LocationUtils.getAddressFromLocation(activity, latLng).getAddressLine(0);
                 if(location.equals(requiredLocation)) {
                     imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA));
-                    imageList.add(imagePath);
+                    picoCaleImage=new PicoCaleImage(imagePath, PicoCaleImageConstants.DEVICE_IMAGE,latitude,longitude);
+                    //imageList.add(imagePath);
+                    picoCaleImageList.add(picoCaleImage);
+
                 }
             }
         }
-        return imageList;
+        return picoCaleImageList;
     }
 
-    public List<String> getLocationBasedImageList(Activity activity){
+    public List<PicoCaleImage> getLocationBasedImageList(Activity activity){
 
         double imageLatitude, imageLongitude;
         double minLatitude, maxLatitude;
@@ -84,6 +98,10 @@ public class DeviceImageServiceImpl implements ImageService {
                 null,
                 orderBy
         );
+
+        //List for picoCaleImageList
+        List<PicoCaleImage> picoCaleImageList=new ArrayList<PicoCaleImage>();
+
         int count = cursor.getCount();
         Log.i("---BOOL-->", "Inside getLocationBasedImageList");
         //Getting the current Location
@@ -124,12 +142,15 @@ public class DeviceImageServiceImpl implements ImageService {
 
                 //For populating the images within the radius boundary
                 imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA));
-                imageList.add(imagePath);
+                //imageList.add(imagePath);
+                picoCaleImage=new PicoCaleImage(imagePath,PicoCaleImageConstants.DEVICE_IMAGE,imageLatitude,imageLongitude);
+                picoCaleImageList.add(picoCaleImage);
             }
         }
 //        Log.i("---BOOLCOUNT-->", Double.valueOf(imageCount).toString());
         //returning the location based image list
-        return imageList;
+        //return imageList;
+        return picoCaleImageList;
     }
 
 }

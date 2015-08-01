@@ -12,6 +12,7 @@ import java.util.List;
 
 import edu.cmu.mobileapp.picocale.R;
 import edu.cmu.mobileapp.picocale.listener.GalleryItemClickListener;
+import edu.cmu.mobileapp.picocale.model.PicoCaleImage;
 import edu.cmu.mobileapp.picocale.service.DeviceImageServiceImpl;
 import edu.cmu.mobileapp.picocale.service.ImageService;
 import edu.cmu.mobileapp.picocale.view.adapter.ImageGridAdapter;
@@ -20,7 +21,7 @@ import edu.cmu.mobileapp.picocale.view.fragment.HomeFragment;
 /**
  * Created by srikrishnan_suresh on 07/26/2015.
  */
-public class DeviceImageFetcher extends AsyncTask<String, Void, List<String>> {
+public class DeviceImageFetcher extends AsyncTask<String, Void, List<PicoCaleImage>> {
     private Activity activity;
     private GridView gridView;
     private ProgressDialog progress;
@@ -41,7 +42,7 @@ public class DeviceImageFetcher extends AsyncTask<String, Void, List<String>> {
     }
 
     @Override
-    protected List<String> doInBackground(String... params) {
+    protected List<PicoCaleImage> doInBackground(String... params) {
         String location = params[0];
         String type = params[1];
         if(type.equals("1"))
@@ -52,7 +53,7 @@ public class DeviceImageFetcher extends AsyncTask<String, Void, List<String>> {
     }
 
     @Override
-    protected void onPostExecute(List<String> locationList) {
+    protected void onPostExecute(List<PicoCaleImage> locationList) {
         super.onPostExecute(locationList);
         gridView.setAdapter(new ImageGridAdapter(activity, locationList));
         gridView.setOnItemClickListener(new GalleryItemClickListener(activity, locationList, 1));

@@ -14,16 +14,17 @@ import android.widget.ListAdapter;
 import java.util.List;
 
 import edu.cmu.mobileapp.picocale.R;
+import edu.cmu.mobileapp.picocale.model.PicoCaleImage;
 
 /**
  * Created by srikrishnan_suresh on 07/27/2015.
  */
 public class ImageGridAdapter extends BaseAdapter {
     private Activity activity;
-    private List<String> locationList;
+    private List<PicoCaleImage> locationList;
     private static LayoutInflater inflater = null;
 
-    public ImageGridAdapter(Activity activity, List<String> locationList) {
+    public ImageGridAdapter(Activity activity, List<PicoCaleImage> locationList) {
         this.activity = activity;
         this.locationList = locationList;
         inflater = (LayoutInflater) activity
@@ -54,7 +55,7 @@ public class ImageGridAdapter extends BaseAdapter {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 8;
 
-        String filePath = locationList.get(position);
+        String filePath = locationList.get(position).getFilePath();
         Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
 
         image.setImageBitmap(bitmap);

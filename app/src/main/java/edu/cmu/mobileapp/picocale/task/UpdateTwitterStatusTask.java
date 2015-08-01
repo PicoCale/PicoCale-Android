@@ -10,6 +10,8 @@ import android.widget.Toast;
 import java.io.File;
 
 import edu.cmu.mobileapp.picocale.constants.TwitterOAuthConstants;
+import edu.cmu.mobileapp.picocale.model.PicoCaleImage;
+import twitter4j.GeoLocation;
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -49,9 +51,16 @@ public class UpdateTwitterStatusTask extends AsyncTask<String, String, String> {
 
         String tweetStatus = params[0];
         String filePath = params[1];
+        Log.i("File path",filePath);
+        Double imageLatitude=Double.parseDouble(params[2]);
+        Log.i("Lat",imageLatitude.toString());
+        Double imageLongitude=Double.parseDouble(params[3]);
+        Log.i("Long",imageLongitude.toString());
+
         File file = new File(filePath);
         StatusUpdate update = new StatusUpdate(tweetStatus);
         update.setMedia(file);
+        //update.setLocation(new GeoLocation(imageLatitude, imageLongitude));
 
         ConfigurationBuilder builder = new ConfigurationBuilder();
         builder.setOAuthConsumerKey(TwitterOAuthConstants.TWITTER_CONSUMER_KEY);

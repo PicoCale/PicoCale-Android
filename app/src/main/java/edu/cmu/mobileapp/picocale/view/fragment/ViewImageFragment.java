@@ -32,6 +32,9 @@ public class ViewImageFragment extends android.support.v4.app.Fragment {
     private SharedPreferences preference;
     String imagePath;
     String imageURL;
+    double imageLatitude;
+    double imageLongitude;
+
     private static Bitmap downloadBitmap(String stringUrl) {
         URL url = null;
         HttpURLConnection connection = null;
@@ -62,9 +65,14 @@ public class ViewImageFragment extends android.support.v4.app.Fragment {
 
         imagePath = i.getStringExtra("imagePath");
         imageURL = i.getStringExtra("imageURL");
+        imageLatitude=i.getDoubleExtra("imageLatitude",0.0);
+        imageLongitude=i.getDoubleExtra("imageLongitude",0.0);
+
         ImageView imageView = (ImageView) rootView.findViewById(R.id.full_image_view);
 
         if(imagePath!=null) {
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 2;
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
             imageView.setImageBitmap(bitmap);
         }
@@ -96,6 +104,8 @@ public class ViewImageFragment extends android.support.v4.app.Fragment {
                 Intent twitterIntent = new Intent(activity.getApplicationContext(), TwitterOAuthActivity.class);
                 twitterIntent.putExtra("imagePath",imagePath);
                 twitterIntent.putExtra("imageURL",imageURL);
+                twitterIntent.putExtra("imageLatitude",imageLatitude);
+                twitterIntent.putExtra("imageLongitude",imageLongitude);
                 activity.startActivity(twitterIntent);
                 return true;
             default:

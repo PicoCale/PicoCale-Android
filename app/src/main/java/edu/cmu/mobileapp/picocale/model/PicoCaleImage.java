@@ -1,18 +1,21 @@
 package edu.cmu.mobileapp.picocale.model;
 
+import edu.cmu.mobileapp.picocale.constants.PicoCaleImageConstants;
+
 /**
  * Created by srikrishnan_suresh on 07/31/2015.
  */
 public class PicoCaleImage {
 
-    public PicoCaleImage(String filePath) {
-        this(filePath, 0.0, 0.0);
-    }
 
-    public PicoCaleImage(String filePath, double latitude, double longitude) {
-        this.filePath = filePath;
+    public PicoCaleImage(String string, int type, double latitude, double longitude) {
+        if(type == PicoCaleImageConstants.DEVICE_IMAGE)
+            this.filePath = string;
+        else if(type == PicoCaleImageConstants.URL_IMAGE)
+            this.urlPath = string;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.type=type;
     }
 
     public String getFilePath() {
@@ -21,6 +24,22 @@ public class PicoCaleImage {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public String getUrlPath() {
+        return urlPath;
+    }
+
+    public void setUrlPath(String urlPath) {
+        this.urlPath = urlPath;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public double getLatitude() {
@@ -40,6 +59,8 @@ public class PicoCaleImage {
     }
 
     private String filePath;
+    private String urlPath;
     double latitude;
     double longitude;
+    int type;
 }
