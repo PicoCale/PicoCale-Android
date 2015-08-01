@@ -60,7 +60,7 @@ public class UpdateTwitterStatusTask extends AsyncTask<String, String, String> {
         File file = new File(filePath);
         StatusUpdate update = new StatusUpdate(tweetStatus);
         update.setMedia(file);
-        //update.setLocation(new GeoLocation(imageLatitude, imageLongitude));
+        update.setLocation(new GeoLocation(imageLatitude, imageLongitude));
 
         ConfigurationBuilder builder = new ConfigurationBuilder();
         builder.setOAuthConsumerKey(TwitterOAuthConstants.TWITTER_CONSUMER_KEY);
