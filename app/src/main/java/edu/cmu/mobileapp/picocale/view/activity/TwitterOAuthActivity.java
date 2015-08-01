@@ -1,6 +1,7 @@
 package edu.cmu.mobileapp.picocale.view.activity;
 
 import edu.cmu.mobileapp.picocale.constants.TwitterOAuthConstants;
+import edu.cmu.mobileapp.picocale.listener.PostTweetListener;
 import edu.cmu.mobileapp.picocale.task.LoadImageTask;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -100,7 +101,7 @@ public class TwitterOAuthActivity extends ActionBarActivity {
         handlerName = (TextView) findViewById(R.id.user_handler_name);
         iconTwitter = (ImageView)findViewById(R.id.icon_twit);
 
-        tweetStatus = "Sent using @PicoCale";
+        tweetStatus = "Sent using @PicoCaleApp";
         tweetMessage.setText(tweetStatus);
 
         Intent intent = getIntent();
@@ -145,10 +146,10 @@ public class TwitterOAuthActivity extends ActionBarActivity {
         iconTwitter.setVisibility(View.VISIBLE);
         tweetMessage.setVisibility(View.VISIBLE);
         confirmTweetButton.setVisibility(View.VISIBLE);
-        confirmTweetButton.setOnClickListener(null);
         handlerName.setVisibility(View.VISIBLE);
-        handlerName.setText("@" + pref.getString("SCREEN_NAME",""));
-        //confirmTweetButton.setOnClickListener(new ConfirmTweetListener(this, tweetStatus, filePath, mediaType));
+        handlerName.setText("@" + pref.getString("SCREEN_NAME", ""));
+        confirmTweetButton.setOnClickListener(null);
+        confirmTweetButton.setOnClickListener(new PostTweetListener(this, tweetMessage, imagePath));
     }
 
     private boolean isTwitterLoggedInAlready() {
