@@ -4,6 +4,7 @@ import edu.cmu.mobileapp.picocale.constants.TwitterOAuthConstants;
 import edu.cmu.mobileapp.picocale.listener.PostTweetListener;
 import edu.cmu.mobileapp.picocale.model.PicoCaleImage;
 import edu.cmu.mobileapp.picocale.task.LoadImageTask;
+import edu.cmu.mobileapp.picocale.util.LocationUtils;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -105,16 +106,20 @@ public class TwitterOAuthActivity extends ActionBarActivity {
         handlerName = (TextView) findViewById(R.id.user_handler_name);
         iconTwitter = (ImageView)findViewById(R.id.icon_twit);
 
-        tweetStatus = "Sent using @PicoCaleApp";
-        tweetMessage.setText(tweetStatus);
-
         Intent intent = getIntent();
-        imagePath = intent.getStringExtra("imagePath");
-        imageURL = intent.getStringExtra("imageURL");
         imageLatitude=intent.getDoubleExtra("imageLatitude", 0.0);
         imageLongitude=intent.getDoubleExtra("imageLongitude",0.0);
 
-        Log.i("Latitude>>",Double.toString(imageLatitude));
+        String address = LocationUtils.getAddressFromLocation(getApplicationContext(), imageLatitude, imageLongitude).getAddressLine(0);
+        address = address.replace(' ', '_');
+        tweetStatus = "Sent using @PicoCaleApp from #"+address;
+        tweetMessage.setText(tweetStatus);
+
+        imagePath = intent.getStringExtra("imagePath");
+        imageURL = intent.getStringExtra("imageURL");
+
+
+        Log.i("Latitude>>", Double.toString(imageLatitude));
         Log.i("Longitude>>",Double.toString(imageLongitude));
 
         final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -162,7 +167,6 @@ public class TwitterOAuthActivity extends ActionBarActivity {
         handlerName.setText("@" + pref.getString("SCREEN_NAME", ""));
         confirmTweetButton.setOnClickListener(null);
         picoCaleImage=new PicoCaleImage(imagePath,0,imageLatitude,imageLongitude);
-        //confirmTweetButton.setOnClickListener(new PostTweetListener(this, tweetMessage, imagePath));
         confirmTweetButton.setOnClickListener(new PostTweetListener(this, tweetMessage, picoCaleImage));
         Log.i("imageLatit in twit", Double.toString(imageLatitude));
         Log.i("imageLong in twit", Double.toString(imageLongitude));

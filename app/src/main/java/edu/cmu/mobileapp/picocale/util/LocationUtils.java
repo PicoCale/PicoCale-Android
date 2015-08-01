@@ -25,6 +25,13 @@ import java.util.Set;
  */
 public class LocationUtils {
 
+    /**
+     * Fetches the address for a given location and context
+     * */
+    public static Address getAddressFromLocation(Context context, double latitude, double longitude) {
+        return getAddressFromLocation(context, new LatLng(latitude, longitude));
+    }
+
    /**
      * Fetches the address for a given location and context
      * */
@@ -40,6 +47,7 @@ public class LocationUtils {
         }
         return address;
     }
+
     /**
      * Checks if GPS is on for the given manager
      * */
