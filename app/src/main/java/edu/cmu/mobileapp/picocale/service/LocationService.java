@@ -81,7 +81,7 @@ public class LocationService extends Service {
 
         // Send the notification
         // We use a layout id because it is a unique number. We use it later to
-        // cancel.
+        // cancel
         mNM.notify(R.string.app_name, notification);
     }
 

@@ -26,12 +26,16 @@ public class HomeFragment extends android.support.v4.app.Fragment {
     List<String> imagesWithinBoundary;
     GridView gridView;
     SharedPreferences.Editor editor;
+    String type;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         imagesWithinBoundary = new ArrayList<String>();
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-        String type = "2";
+
+        //To signify that the images are obtained from device
+        type = "2";
+
         //Getting the radius value from the preferences
         SharedPreferences sharedPref = getActivity().getSharedPreferences("PicoCale", 0);
         String radius = sharedPref.getString("userRadius","2");

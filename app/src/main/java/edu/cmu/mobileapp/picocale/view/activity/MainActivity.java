@@ -42,35 +42,18 @@ public class MainActivity extends ActionBarActivity {
         }
 
 //        ---------------------------
-        ImageService imageService = new DeviceImageServiceImpl();
-        Activity activity = this;
-        int count = imageService.getLocationBasedImageList(activity.getApplicationContext(), LocationUtils.getCurrentLocation(activity)).size();
-        Boolean isImageAvailable = false;
-        if(count>0)
-            isImageAvailable = true;
-        else
-            isImageAvailable = false;
-
-        //Getting the radius value from the preferences
+        //Getting the notification Setting value from the preferences
         SharedPreferences sharedPref = this.getSharedPreferences("PicoCale", 0);
         boolean notificationSetting = sharedPref.getBoolean("notificationSetting", true);
-//        Log.i("--NOTIF1-->", notificationSetting + "--" + NotificationConstants.notificationFlag);
+
         Intent serviceIntent=null;
         if(notificationSetting) {
-            //Calling the LocationService Class
-//            Log.d("--CHK123--->", "InsideMainActivity");
-//            Log.i("--NOTIF2-->", "Inside TRUE");
+            //Calling the LocationService Class through service Intent
             serviceIntent = new Intent("edu.cmu.mobileapp.picocale.service.LocationService");
-//            serviceIntent.putExtra("isImageAvailable", isImageAvailable);
-//            serviceIntent.putExtra("imageCount", count);
-//            serviceIntent.putExtra("notificationSetting",notificationSetting);
-//            Log.d("--CHK123--->", "InsideMainActivity:ImgAvail" + isImageAvailable);
             NotificationConstants.notificationFlag = 1;
             this.startService(serviceIntent);
-//            Log.i("--NOTIFLAG2-->", NotificationConstants.notificationFlag+"");
         }
         else if(!notificationSetting && NotificationConstants.notificationFlag==1 && serviceIntent!=null){
-//            Log.i("--NOTIF3-->","Inside FALSE");
             this.stopService(serviceIntent);
             NotificationConstants.notificationFlag=0;
         }
@@ -78,6 +61,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     protected void showAlertDialog(final String type){
+        //Building the alert Dialog for this activity
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
         // set title
@@ -89,6 +73,9 @@ public class MainActivity extends ActionBarActivity {
                 .setCancelable(false)
                 .setPositiveButton("Settings", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        //if this button is clicked, take the user
+                        //to the settings page based on context
+                        // either location(GPS) or network
                         if (type.equals("location")) {
                             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                         } else if (type.equals("network")) {
@@ -103,6 +90,8 @@ public class MainActivity extends ActionBarActivity {
                         dialog.cancel();
                     }
                 });
+
+        //Creating and showing the alert Dialog
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
