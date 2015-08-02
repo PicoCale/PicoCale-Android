@@ -39,7 +39,7 @@ public class MainActivity extends ActionBarActivity {
             showAlertDialog("location");
         }
 
-        //Obtaining an instance of imageService to know
+        /*//Obtaining an instance of imageService to know
         // whether there are images present within
         // the current radius boundary
         ImageService imageService = new DeviceImageServiceImpl();
@@ -56,7 +56,7 @@ public class MainActivity extends ActionBarActivity {
 //        Log.i("---BOOL2AVL-->", isImageAvailable.toString());
         serviceIntent.putExtra("isImageAvailable",isImageAvailable);
         serviceIntent.putExtra("imageCount",count);
-        startService(serviceIntent);
+        startService(serviceIntent);*/
     }
 
     protected void showAlertDialog(final String type){
