@@ -70,18 +70,25 @@ public class ViewImageFragment extends android.support.v4.app.Fragment {
 
         ImageView imageView = (ImageView) rootView.findViewById(R.id.full_image_view);
 
+        setHasOptionsMenu(true);
+
+
+
+
         if(imagePath!=null) {
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 2;
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
             imageView.setImageBitmap(bitmap);
+
         }
         else if(imageURL!=null){
             Log.i("-URL--->", imageURL);
-            new LoadImageTask(getActivity(),imageView).execute(imageURL);
+            new LoadImageTask(getActivity(), imageView).execute(imageURL);
+
         }
 
-        setHasOptionsMenu(true);
+
         return rootView;
     }
     @Override
@@ -89,6 +96,13 @@ public class ViewImageFragment extends android.support.v4.app.Fragment {
         // Inflate the menu; this adds items to the action bar if it is present.
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_view_image, menu);
+        MenuItem tweet_item = menu.findItem(R.id.tweet_image);
+        if(imagePath!=null) {
+            tweet_item.setVisible(true);
+        }
+        else if(imageURL!=null){
+            tweet_item.setVisible(false);
+        }
     }
 
     @Override
