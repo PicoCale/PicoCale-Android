@@ -8,6 +8,6 @@
         android:columnWidth="90dp"
         android:horizontalSpacing="1dp"
         android:verticalSpacing="1dp"
-        android:numColumns="2"
+        android:numColumns="3"
         android:stretchMode="columnWidth" />
 </RelativeLayout>
