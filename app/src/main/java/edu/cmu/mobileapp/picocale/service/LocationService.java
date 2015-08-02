@@ -16,6 +16,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import edu.cmu.mobileapp.picocale.R;
+import edu.cmu.mobileapp.picocale.util.LocationUtils;
 import edu.cmu.mobileapp.picocale.view.activity.MainActivity;
 
 /**
@@ -34,6 +35,7 @@ public class LocationService extends Service {
     Boolean isImageAvailable = false;
     Boolean notificationSetting = false;
     int imageCount = 0;
+    Context context;
     @Override
     public void onCreate()
     {
@@ -44,6 +46,7 @@ public class LocationService extends Service {
         // Display a notification about us starting. We put an icon in the
         // status bar.
         //showNotification();
+        context = this.getApplicationContext();
     }
 
     @Override
@@ -129,7 +132,18 @@ public class LocationService extends Service {
             Log.i("--CHK123--->", "InsideLocService:NOTIF-" + notificationSetting + "Image-" + isImageAvailable);
             
             //checking for any device images within the current radius boundary
-            if(isImageAvailable && notificationSetting)
+            //Obtaining image list
+
+            ImageService imageService = new DeviceImageServiceImpl();
+            imageCount = imageService.getLocationBasedImageList(context, loc).size();
+            Boolean isImageAvailable = false;
+            if(imageCount>0)
+                isImageAvailable = true;
+            else
+                isImageAvailable = false;
+
+            //Deciding whether to show notifications or not
+            if(isImageAvailable /*&& notificationSetting*/)
                 showNotification();
             sendBroadcast(intent);
             //}
@@ -224,14 +238,14 @@ public class LocationService extends Service {
         // cancel.
         mNM.notify(R.string.local_service_started, notification);
 */
-        if(intent!=null) {
+        /*if(intent!=null) {
             Log.d("--CHK123--->", "InsideOnStartCommand");
             isImageAvailable = intent.getBooleanExtra("isImageAvailable", false);
             imageCount = intent.getIntExtra("imageCount", 0);
             notificationSetting = intent.getBooleanExtra("notificationSetting", false);
             Log.i("--CHK123--->", "InsideOnStartCommand"+isImageAvailable);
             Log.i("---BOOL3AVL-->", isImageAvailable.toString());
-        }
+        }*/
         return super.onStartCommand(intent,flags,startId);
     }
 }
