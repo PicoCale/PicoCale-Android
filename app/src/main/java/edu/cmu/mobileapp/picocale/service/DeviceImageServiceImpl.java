@@ -1,6 +1,7 @@
 package edu.cmu.mobileapp.picocale.service;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Location;
@@ -73,7 +74,7 @@ public class DeviceImageServiceImpl implements ImageService {
         return picoCaleImageList;
     }
 
-    public List<PicoCaleImage> getLocationBasedImageList(Activity activity){
+    public List<PicoCaleImage> getLocationBasedImageList(Context context,Location location){
 
         double imageLatitude, imageLongitude;
         double minLatitude, maxLatitude;
@@ -92,7 +93,8 @@ public class DeviceImageServiceImpl implements ImageService {
                 MediaStore.Images.ImageColumns.LONGITUDE
         };
         final String orderBy = MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC";
-        Cursor cursor = activity.managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+
+        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 columns,
                 null,
                 null,
@@ -105,7 +107,7 @@ public class DeviceImageServiceImpl implements ImageService {
         int count = cursor.getCount();
         Log.i("---BOOL-->", "Inside getLocationBasedImageList");
         //Getting the current Location
-        Location location = LocationUtils.getCurrentLocation(activity);
+//        Location location = LocationUtils.getCurrentLocation(activity);
 
         if(location!=null) {
             //Getting the current latitude and longitude
@@ -115,7 +117,7 @@ public class DeviceImageServiceImpl implements ImageService {
         Log.i("---BOOLAT-->", Double.valueOf(currentLatitude).toString());
         Log.i("---BOOLON-->", Double.valueOf(currentLongitude).toString());
         //Getting the radius value from the preferences
-        SharedPreferences sharedPref = activity.getSharedPreferences("PicoCale", 0);
+        SharedPreferences sharedPref = context.getSharedPreferences("PicoCale", 0);
         radiusValue = Double.parseDouble(sharedPref.getString("userRadius", "5"));
 
         //Getting the min, max latitude values

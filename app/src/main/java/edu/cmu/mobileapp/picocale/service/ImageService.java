@@ -1,6 +1,7 @@
 package edu.cmu.mobileapp.picocale.service;
 
 import android.app.Activity;
+import android.content.Context;
 import android.location.Location;
 
 import java.util.List;
@@ -12,5 +13,5 @@ import edu.cmu.mobileapp.picocale.model.PicoCaleImage;
  */
 public interface ImageService {
     public List<PicoCaleImage> getImageList(Activity activity, String location);
-    public List<PicoCaleImage> getLocationBasedImageList(Activity activity);
+    public List<PicoCaleImage> getLocationBasedImageList(Context context, Location location);
 }

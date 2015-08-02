@@ -1,5 +1,6 @@
 package edu.cmu.mobileapp.picocale.view.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import edu.cmu.mobileapp.picocale.R;
+import edu.cmu.mobileapp.picocale.constants.NotificationConstants;
 import edu.cmu.mobileapp.picocale.service.DeviceImageServiceImpl;
 import edu.cmu.mobileapp.picocale.service.ImageService;
 import edu.cmu.mobileapp.picocale.util.LocationUtils;
@@ -39,24 +41,40 @@ public class MainActivity extends ActionBarActivity {
             showAlertDialog("location");
         }
 
-        /*//Obtaining an instance of imageService to know
-        // whether there are images present within
-        // the current radius boundary
+//        ---------------------------
         ImageService imageService = new DeviceImageServiceImpl();
-        int count = imageService.getLocationBasedImageList(this).size();
-//        Log.i("---BOOL2CNT-->", Double.valueOf(count).toString());
+        Activity activity = this;
+        int count = imageService.getLocationBasedImageList(activity.getApplicationContext(), LocationUtils.getCurrentLocation(activity)).size();
         Boolean isImageAvailable = false;
         if(count>0)
             isImageAvailable = true;
         else
             isImageAvailable = false;
 
-        //Calling the LocationService Class
-        Intent serviceIntent = new Intent("edu.cmu.mobileapp.picocale.service.LocationService");
-//        Log.i("---BOOL2AVL-->", isImageAvailable.toString());
-        serviceIntent.putExtra("isImageAvailable",isImageAvailable);
-        serviceIntent.putExtra("imageCount",count);
-        startService(serviceIntent);*/
+        //Getting the radius value from the preferences
+        SharedPreferences sharedPref = this.getSharedPreferences("PicoCale", 0);
+        boolean notificationSetting = sharedPref.getBoolean("notificationSetting", true);
+//        Log.i("--NOTIF1-->", notificationSetting + "--" + NotificationConstants.notificationFlag);
+        Intent serviceIntent=null;
+        if(notificationSetting) {
+            //Calling the LocationService Class
+//            Log.d("--CHK123--->", "InsideMainActivity");
+//            Log.i("--NOTIF2-->", "Inside TRUE");
+            serviceIntent = new Intent("edu.cmu.mobileapp.picocale.service.LocationService");
+//            serviceIntent.putExtra("isImageAvailable", isImageAvailable);
+//            serviceIntent.putExtra("imageCount", count);
+//            serviceIntent.putExtra("notificationSetting",notificationSetting);
+//            Log.d("--CHK123--->", "InsideMainActivity:ImgAvail" + isImageAvailable);
+            NotificationConstants.notificationFlag = 1;
+            this.startService(serviceIntent);
+//            Log.i("--NOTIFLAG2-->", NotificationConstants.notificationFlag+"");
+        }
+        else if(!notificationSetting && NotificationConstants.notificationFlag==1 && serviceIntent!=null){
+//            Log.i("--NOTIF3-->","Inside FALSE");
+            this.stopService(serviceIntent);
+            NotificationConstants.notificationFlag=0;
+        }
+//      --------------------------------
     }
 
     protected void showAlertDialog(final String type){

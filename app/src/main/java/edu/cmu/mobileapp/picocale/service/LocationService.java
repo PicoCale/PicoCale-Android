@@ -129,7 +129,6 @@ public class LocationService extends Service {
             intent.putExtra("Latitude", loc.getLatitude());
             intent.putExtra("Longitude", loc.getLongitude());
             intent.putExtra("Provider", loc.getProvider());
-            Log.i("--CHK123--->", "InsideLocService:NOTIF-" + notificationSetting + "Image-" + isImageAvailable);
             
             //checking for any device images within the current radius boundary
             //Obtaining image list

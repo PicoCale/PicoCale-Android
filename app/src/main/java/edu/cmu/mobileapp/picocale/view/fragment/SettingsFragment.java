@@ -1,5 +1,6 @@
 package edu.cmu.mobileapp.picocale.view.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,7 @@ import edu.cmu.mobileapp.picocale.R;
 import edu.cmu.mobileapp.picocale.service.DeviceImageServiceImpl;
 import edu.cmu.mobileapp.picocale.service.ImageService;
 import edu.cmu.mobileapp.picocale.service.LocationService;
+import edu.cmu.mobileapp.picocale.util.LocationUtils;
 
 /**
  * Created by user on 7/25/2015.
@@ -34,7 +36,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //initialisations
+        //initializations
         final View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
         sharedPref = getActivity().getSharedPreferences("PicoCale", 0);
         saveButton = (Button) rootView.findViewById(R.id.saveButton);
@@ -52,36 +54,33 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         //Listeners
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-//                sharedPref = PreferenceManager.getDefaultSharedPreferences();
-                ImageService imageService = new DeviceImageServiceImpl();
-                int count = imageService.getLocationBasedImageList(getActivity()).size();
-                Boolean isImageAvailable = false;
-                if(count>0)
-                    isImageAvailable = true;
-                else
-                    isImageAvailable = false;
                 notificationSettingValue = sharedPref.getBoolean("notificationSetting", true);
                 boolean notifVal = notificationSwitch.isChecked();
+
+                //Saving the values to preference
                 editor = sharedPref.edit();
                 editor.putString("userRadius", userRadiusText.getText().toString());
                 editor.putBoolean("notificationSetting", notifVal);
                 editor.commit();
-                Log.d("--CHK123--->", "B4:"+notificationSettingValue+"AFTER:"+ notifVal);
+
+                //Deciding what to do
                 if(notificationSettingValue==true && notifVal == false){
-                    Log.d("--CHK123--->", "onClick: stoping srvice:"+notifVal);
+                    //Notification Setting turned from ON to OFF
+                    //Stop Location service
                     getActivity().stopService(new Intent(getActivity(), LocationService.class));
                 }
                 else if(notificationSettingValue==false && notifVal == true){
-                    Log.d("--CHK123--->", "onClick: starting srvice:"+notifVal);
-                    getActivity().startService(new Intent(getActivity(), LocationService.class)
-                            .putExtra("isImageAvailable", isImageAvailable)
-                            .putExtra("imageCount", count)
-                            .putExtra("notificationSetting",notifVal));
+                    //Notification Setting turned from OFF to ON
+                    //Start Location service
+                    getActivity().startService(new Intent(getActivity(), LocationService.class));
                 }
                 if (rootView != null) {
+                    //After activities completed, bring down soft keyboard
                     InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
                 }
+
+                //Acknowledgement Toast message
                 Toast.makeText(getActivity().getApplicationContext(),"Settings Saved",Toast.LENGTH_LONG).show();
             }
         });

@@ -15,6 +15,7 @@ import edu.cmu.mobileapp.picocale.listener.GalleryItemClickListener;
 import edu.cmu.mobileapp.picocale.model.PicoCaleImage;
 import edu.cmu.mobileapp.picocale.service.DeviceImageServiceImpl;
 import edu.cmu.mobileapp.picocale.service.ImageService;
+import edu.cmu.mobileapp.picocale.util.LocationUtils;
 import edu.cmu.mobileapp.picocale.view.adapter.ImageGridAdapter;
 import edu.cmu.mobileapp.picocale.view.fragment.HomeFragment;
 
@@ -48,7 +49,7 @@ public class DeviceImageFetcher extends AsyncTask<String, Void, List<PicoCaleIma
         if(type.equals("1"))
             return imageService.getImageList(activity, location);
         else if(type.equals("2"))
-            return imageService.getLocationBasedImageList(activity);
+            return imageService.getLocationBasedImageList(activity.getApplicationContext(), LocationUtils.getCurrentLocation(activity));
         return null;
     }
 
