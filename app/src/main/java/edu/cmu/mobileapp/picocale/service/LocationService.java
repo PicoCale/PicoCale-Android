@@ -32,7 +32,7 @@ public class LocationService extends Service {
     Intent intent;
     int counter = 0;
     Boolean isImageAvailable = false;
-    Boolean notificationSetting = true;
+    Boolean notificationSetting = false;
     int imageCount = 0;
     @Override
     public void onCreate()
@@ -52,9 +52,7 @@ public class LocationService extends Service {
         Log.i("->>Service started", "Yes");
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         listener = new MyLocationListener();
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, listener);
-        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
-
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, listener);
     }
 
     private void showNotification() {
@@ -131,7 +129,7 @@ public class LocationService extends Service {
             Log.i("--CHK123--->", "InsideLocService:NOTIF-" + notificationSetting + "Image-" + isImageAvailable);
             
             //checking for any device images within the current radius boundary
-            if(isImageAvailable /*&& notificationSetting*/)
+            if(isImageAvailable && notificationSetting)
                 showNotification();
             sendBroadcast(intent);
             //}
@@ -227,9 +225,11 @@ public class LocationService extends Service {
         mNM.notify(R.string.local_service_started, notification);
 */
         if(intent!=null) {
+            Log.d("--CHK123--->", "InsideOnStartCommand");
             isImageAvailable = intent.getBooleanExtra("isImageAvailable", false);
             imageCount = intent.getIntExtra("imageCount", 0);
-            notificationSetting = intent.getBooleanExtra("notificationSetting",false);
+            notificationSetting = intent.getBooleanExtra("notificationSetting", false);
+            Log.i("--CHK123--->", "InsideOnStartCommand"+isImageAvailable);
             Log.i("---BOOL3AVL-->", isImageAvailable.toString());
         }
         return super.onStartCommand(intent,flags,startId);
