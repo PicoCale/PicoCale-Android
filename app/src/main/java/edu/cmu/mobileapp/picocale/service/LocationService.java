@@ -64,7 +64,7 @@ public class LocationService extends Service {
         Log.i("Text",text.toString());
 
         // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(R.drawable.icon_cloud,
+        Notification notification = new Notification(R.drawable.icon_picocale,
                 text, System.currentTimeMillis());
 
         // The PendingIntent to launch our activity if the user selects this
