@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import edu.cmu.mobileapp.picocale.R;
 import edu.cmu.mobileapp.picocale.service.DeviceImageServiceImpl;
@@ -81,6 +82,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
                     InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
                 }
+                Toast.makeText(getActivity().getApplicationContext(),"Settings Saved",Toast.LENGTH_LONG).show();
             }
         });
 

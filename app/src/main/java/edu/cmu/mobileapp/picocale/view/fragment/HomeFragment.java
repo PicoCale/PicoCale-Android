@@ -43,7 +43,7 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
         //Getting the radius value from the preferences
         SharedPreferences sharedPref = getActivity().getSharedPreferences("PicoCale", 0);
-        editor = sharedPref.edit();
+        //editor = sharedPref.edit();
         boolean notificationSetting = sharedPref.getBoolean("notificationSetting", true);
 //        Log.i("--NOTIF1-->", notificationSetting + "--" + sharedPref1.getString("notificationFlag", "DEF"));
         Log.i("--NOTIF1-->", notificationSetting + "--" + NotificationConstants.notificationFlag);
@@ -68,7 +68,7 @@ public class HomeFragment extends android.support.v4.app.Fragment {
             NotificationConstants.notificationFlag=0;
         }
 //      --------------------------------
-        String radius = sharedPref.getString("userRadius","");
+        String radius = sharedPref.getString("userRadius","2");
 
         //Getting the images present within the radius boundary
         gridView = (GridView) rootView.findViewById(R.id.galleryGrid);
