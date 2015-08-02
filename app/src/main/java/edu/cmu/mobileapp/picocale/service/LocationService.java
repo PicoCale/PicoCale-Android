@@ -76,7 +76,7 @@ public class LocationService extends Service {
         notification.setLatestEventInfo(this, getText(R.string.service_name),
                 text, contentIntent);
 
-        // Send the notification.
+        // Send the notification
         // We use a layout id because it is a unique number. We use it later to
         // cancel.
         mNM.notify(R.string.app_name, notification);
