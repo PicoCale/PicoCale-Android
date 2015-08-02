@@ -54,6 +54,7 @@ public class HomeFragment extends android.support.v4.app.Fragment {
             serviceIntent = new Intent("edu.cmu.mobileapp.picocale.service.LocationService");
             serviceIntent.putExtra("isImageAvailable", isImageAvailable);
             serviceIntent.putExtra("imageCount", count);
+            serviceIntent.putExtra("notificationSetting",notificationSetting);
 //            editor.putString("notificationFlag", "1");
             NotificationConstants.notificationFlag = 1;
             getActivity().startService(serviceIntent);

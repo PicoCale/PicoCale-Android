@@ -1,5 +1,6 @@
 package edu.cmu.mobileapp.picocale.service;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -31,6 +32,7 @@ public class LocationService extends Service {
     Intent intent;
     int counter = 0;
     Boolean isImageAvailable = false;
+    Boolean notificationSetting = true;
     int imageCount = 0;
     @Override
     public void onCreate()
@@ -126,9 +128,10 @@ public class LocationService extends Service {
             intent.putExtra("Latitude", loc.getLatitude());
             intent.putExtra("Longitude", loc.getLongitude());
             intent.putExtra("Provider", loc.getProvider());
-
+            Log.i("--CHK123--->", "InsideLocService:NOTIF-" + notificationSetting + "Image-" + isImageAvailable);
+            
             //checking for any device images within the current radius boundary
-            if(isImageAvailable)
+            if(isImageAvailable /*&& notificationSetting*/)
                 showNotification();
             sendBroadcast(intent);
             //}
@@ -226,6 +229,7 @@ public class LocationService extends Service {
         if(intent!=null) {
             isImageAvailable = intent.getBooleanExtra("isImageAvailable", false);
             imageCount = intent.getIntExtra("imageCount", 0);
+            notificationSetting = intent.getBooleanExtra("notificationSetting",false);
             Log.i("---BOOL3AVL-->", isImageAvailable.toString());
         }
         return super.onStartCommand(intent,flags,startId);

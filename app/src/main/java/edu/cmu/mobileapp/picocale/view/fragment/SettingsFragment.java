@@ -59,21 +59,23 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
                     isImageAvailable = true;
                 else
                     isImageAvailable = false;
-
+                notificationSettingValue = sharedPref.getBoolean("notificationSetting", true);
                 boolean notifVal = notificationSwitch.isChecked();
                 editor = sharedPref.edit();
                 editor.putString("userRadius", userRadiusText.getText().toString());
-                editor.putBoolean("notificationSetting",notifVal);
+                editor.putBoolean("notificationSetting", notifVal);
                 editor.commit();
+                Log.d("--CHK123--->", "B4:"+notificationSettingValue+"AFTER:"+ notifVal);
                 if(notificationSettingValue==true && notifVal == false){
-                    Log.d("--CHK--->", "onClick: stopping srvice");
+                    Log.d("--CHK123--->", "onClick: stoping srvice:"+notifVal);
                     getActivity().stopService(new Intent(getActivity(), LocationService.class));
                 }
                 else if(notificationSettingValue==false && notifVal == true){
-                    Log.d("--CHK--->", "onClick: starting srvice");
+                    Log.d("--CHK123--->", "onClick: starting srvice:"+notifVal);
                     getActivity().startService(new Intent(getActivity(), LocationService.class)
                             .putExtra("isImageAvailable", isImageAvailable)
-                            .putExtra("imageCount", count));
+                            .putExtra("imageCount", count)
+                            .putExtra("notificationSetting",notifVal));
                 }
                 if (rootView != null) {
                     InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
