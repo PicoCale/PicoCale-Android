@@ -3,6 +3,7 @@ package edu.cmu.mobileapp.picocale.view.fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,6 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
         //Getting the radius value from the preferences
         SharedPreferences sharedPref = getActivity().getSharedPreferences("PicoCale", 0);
-        SharedPreferences sharedPref1 = getActivity().getSharedPreferences("PicoCale", 0);
         editor = sharedPref.edit();
         boolean notificationSetting = sharedPref.getBoolean("notificationSetting", true);
 //        Log.i("--NOTIF1-->", notificationSetting + "--" + sharedPref1.getString("notificationFlag", "DEF"));
@@ -68,10 +68,12 @@ public class HomeFragment extends android.support.v4.app.Fragment {
             NotificationConstants.notificationFlag=0;
         }
 //      --------------------------------
+        String radius = sharedPref.getString("userRadius","");
 
         //Getting the images present within the radius boundary
         gridView = (GridView) rootView.findViewById(R.id.galleryGrid);
         new DeviceImageFetcher(getActivity(),gridView).execute("",type);
+        ((ActionBarActivity)getActivity()).getSupportActionBar().setSubtitle("Photos within "+ radius + " mile radius");
         return rootView;
     }
 }
