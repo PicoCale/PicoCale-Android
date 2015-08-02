@@ -3,8 +3,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="GPSAbsent_Message">GPS Absent!</string>
-    <string name="NetworkAbsent_Message">GPS Absent!</string>
+    <string name="GPSAbsent_Message">No GPS available</string>
+    <string name="NetworkAbsent_Message">No Internet available</string>
     <string name="LoggedIn_Message">Logged In</string>
     <string name="NotLoggedIn_Message">Not logged In</string>
     <string name="authorizationSuccess">Authorization Succeeded!</string>

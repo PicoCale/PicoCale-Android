@@ -87,42 +87,8 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
-        if (result != null && !result.startsWith("error") ) { //$NON-NLS-1$
-            Log.i("Result", Uri.parse(result).toString());
-            Log.i("On post","entered");
-            /*auth_dialog = new Dialog(mContext);
-            auth_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            auth_dialog.setContentView(R.layout.twitter_webview);
-            WebView web = (WebView)auth_dialog.findViewById(R.id.webv);
-            web.getSettings().setJavaScriptEnabled(true);
-            web.loadUrl(result);
-            web.setWebViewClient(new WebViewClient() {
-                boolean authComplete = false;
-
-                @Override
-                public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                    super.onPageStarted(view, url, favicon);
-                }
-
-                @Override
-                public void onPageFinished(WebView view, String url) {
-                    super.onPageFinished(view, url);
-                    if (url.contains("oauth_verifier") && !authComplete) {
-                        authComplete = true;
-                        Uri uri = Uri.parse(url);
-                        //oauth_verifier = uri.getQueryParameter("oauth_verifier");
-                        auth_dialog.dismiss();
-
-                    } else if (url.contains("denied")) {
-                        auth_dialog.dismiss();
-                        Toast.makeText(mContext, "Sorry !Permission Denied", Toast.LENGTH_SHORT).show();
-
-                    }
-                }
-            });
-            auth_dialog.show();
-            auth_dialog.setCancelable(true);
-            */    cloudFragment.startActivity(new Intent(Intent.ACTION_VIEW, Uri
+        if (result != null && !result.startsWith("error") ) {
+            cloudFragment.startActivity(new Intent(Intent.ACTION_VIEW, Uri
                     .parse(result)));
 
         } else {

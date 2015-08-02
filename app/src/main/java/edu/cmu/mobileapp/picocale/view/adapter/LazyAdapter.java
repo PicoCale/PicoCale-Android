@@ -55,42 +55,17 @@ public class LazyAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         int count=getCount();
-        Log.i("Photos count GetView:",Integer.toString(getCount()));
         View vi = convertView;
         if(convertView == null)
             vi = inflater.inflate(R.layout.item_grid_image, null);
-        /*Flickr f = FlickrHelper.getInstance().getFlickrAuthed(oauthToken,
-                oauthTokenSecret);*/
-
-//        TextView text=(TextView)vi.findViewById(R.id.textView);;
-//        ImageView image=(ImageView)vi.findViewById(R.id.imageView);
         ImageView image=(ImageView)vi.findViewById(R.id.gridImage);
         Photo photo = photos.get(position);
-
-       /* GeoData geoData= null;
-        try {
-            geoData = f.getGeoInterface().getLocation(photo.getId());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (FlickrException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Log.i("Geodata",Float.toString(geoData.getLatitude()));*/
-        //new GetLocationTask(activity,text,oauthToken,oauthTokenSecret).execute(photo.getId());
         if (image != null){
             ImageDownloadTask task = new ImageDownloadTask(image);
             Drawable drawable = new ImageUtils.DownloadedDrawable(task);
             image.setImageDrawable(drawable);
             task.execute(photo.getMediumUrl());
         }
-
-
-        Log.i("Photo", photo.getSmallUrl());
-        //text.setText(photo.getTitle());
-        Log.i("Photo", photo.getId());
-        //new DownloadImageTask(image).execute(photo.getSmallUrl());
         return vi;
     }
 }

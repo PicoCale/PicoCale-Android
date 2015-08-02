@@ -6,6 +6,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.googlecode.flickrjandroid.oauth.OAuth;
 import com.googlecode.flickrjandroid.oauth.OAuthToken;
 import com.googlecode.flickrjandroid.people.User;
 
+import edu.cmu.mobileapp.picocale.receiver.BootReceiver;
 import edu.cmu.mobileapp.picocale.task.GetOAuthTokenTask;
 import edu.cmu.mobileapp.picocale.task.LoadPhotoStreamTask;
 
@@ -30,7 +32,7 @@ import edu.cmu.mobileapp.picocale.util.LocationUtils;
 import edu.cmu.mobileapp.picocale.util.NetworkUtils;
 
 /**
- * Created by srikrishnan_suresh on 25-07-2015.
+ * Created by Sivaraman on 25-07-2015.
  */
 public class CloudFragment extends android.support.v4.app.Fragment {
 
@@ -54,19 +56,29 @@ public class CloudFragment extends android.support.v4.app.Fragment {
 
         gridView=(GridView)rootView.findViewById(R.id.flickr_Grid);
 
+
         //To Check for internet connectivity
         if(!NetworkUtils.isOnline(getActivity())){
             Toast.makeText(getActivity().getApplicationContext(),getString(R.string.NetworkAbsent_Message),Toast.LENGTH_LONG).show();
         }
 
-        //Displaying the alert dialog box for the user
-        //to tell about privacy setting
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        final LocationManager locationManager = (LocationManager) getActivity().getSystemService( Context.LOCATION_SERVICE );
+        if(!LocationUtils.isGPSOn(locationManager)){
+            showAlertDialog("location");
+        }
 
-        // set title
-        alertDialogBuilder.setTitle(getString(R.string.alertDialogTitle));
-
+        final OAuth oauth = getOAuthToken();
+        SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        boolean isLoggedIn=settings.getBoolean(PREF_KEY_LOGIN, false);
+        Log.i("Logged in", Boolean.toString(isLoggedIn));
         if(!isLoggedInAlready()) {
+
+            //Displaying the alert dialog box for the user
+            //to tell about privacy setting
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+
+            // set title
+            alertDialogBuilder.setTitle(getString(R.string.alertDialogTitle));
             // Getting user permission for
             alertDialogBuilder
                     .setMessage(getString(R.string.app_name)+" "+getString(R.string.alertDialogMessage))
@@ -75,8 +87,6 @@ public class CloudFragment extends android.support.v4.app.Fragment {
                         public void onClick(DialogInterface dialog, int id) {
                             // if this button is clicked, proceed to flickr auth
                             //Obtaining the authToken
-                            OAuth oauth = getOAuthToken();
-                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.NotLoggedIn_Message), Toast.LENGTH_LONG).show();
                             if (oauth == null || oauth.getUser() == null) {
                                 new OAuthTask(CloudFragment.this, getActivity().getApplicationContext()).execute();
                             }
@@ -94,8 +104,6 @@ public class CloudFragment extends android.support.v4.app.Fragment {
             alertDialog.show();
         }
         else {
-            OAuth oauth = getOAuthToken();
-            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.LoggedIn_Message), Toast.LENGTH_SHORT).show();
             load(oauth, gridView);
         }
         return rootView;
@@ -109,6 +117,36 @@ public class CloudFragment extends android.support.v4.app.Fragment {
         // return twitter login status from Shared Preferences
         SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return settings.getBoolean(PREF_KEY_LOGIN, false);
+    }
+
+    protected void showAlertDialog(final String type){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+
+        // set title
+        alertDialogBuilder.setTitle("Request "+type+" Access");
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage(getString(R.string.app_name)+" suggests you to allow your "+type+" to be detected for a better experience!")
+                .setCancelable(false)
+                .setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (type.equals("location")) {
+                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        } else if (type.equals("network")) {
+                            startActivity(new Intent(Settings.ACTION_SETTINGS));
+                        }
+                    }
+                })
+                .setNegativeButton("Ignore", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // if this button is clicked, just close
+                        // the dialog box and do nothing
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     public OAuth getOAuthToken() {
@@ -127,14 +165,9 @@ public class CloudFragment extends android.support.v4.app.Fragment {
 
         if (userId != null) {
             User user = new User();
-//            Log.i("User id",userId);
             user.setUsername(userName);
             user.setId(userId);
             oauth.setUser(user);
-        }
-        else
-        {
-//            Log.i("User id:","null");
         }
         OAuthToken oauthToken = new OAuthToken();
         oauth.setToken(oauthToken);
@@ -148,14 +181,6 @@ public class CloudFragment extends android.support.v4.app.Fragment {
         String radiusValue = sharedPref.getString("userRadius", "5");
 //        Boolean notificationval = sharedPref.getBoolean("notificationSetting",true);
         if (oauth != null) {
-            if(gridView==null) {
-                Log.i("GridView", "null");
-            }
-            else
-            {
-                Log.i("GridView", " not null");
-            }
-
             //Getting the current Location
             location = LocationUtils.getCurrentLocation(getActivity());
 
@@ -174,18 +199,15 @@ public class CloudFragment extends android.support.v4.app.Fragment {
                 toast.show();
             }
 
-//            Log.i("-->>/",Double.toString(currentLatitude));
-//            Log.i("-->>/",Double.toString(currentLongitude));
-
             //Loading the Flickr photo stream
             new LoadPhotoStreamTask(getActivity(),getActivity().getApplicationContext(),gridView,location,Double.parseDouble(radiusValue)).execute(oauth);
         }
     }
 
+    //On resume method
     @Override
     public void onResume() {
         super.onResume();
-//        Log.i("On", "Resume!");
         Intent intent = getActivity().getIntent();
         String scheme = intent.getScheme();
         OAuth savedToken = getOAuthToken();
@@ -214,27 +236,19 @@ public class CloudFragment extends android.support.v4.app.Fragment {
         editor.putString(KEY_TOKEN_SECRET, tokenSecret);
         editor.putString(KEY_USER_NAME, userName);
         editor.putString(KEY_USER_ID, userId);
-        if(userId!=null) {
-            editor.putBoolean(PREF_KEY_LOGIN, true);
-        }
+        editor.putBoolean(PREF_KEY_LOGIN, true);
         editor.commit();
     }
 
     public void onOAuthDone(OAuth result) {
-        if (result == null) {
-            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.authorizationFail),Toast.LENGTH_LONG).show();
-        } else {
+
             User user = result.getUser();
             OAuthToken token = result.getToken();
             if (user == null || user.getId() == null || token == null || token.getOauthToken() == null || token.getOauthTokenSecret() == null) {
-                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.authorizationFail), Toast.LENGTH_LONG).show();
                 return;
             }
-//            String message = String.format(Locale.US, "Authorization Succeed: user=%s, userId=%s, oauthToken=%s, tokenSecret=%s",user.getUsername(), user.getId(), token.getOauthToken(), token.getOauthTokenSecret());
-            String message = getString(R.string.authorizationSuccess);
-            Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_LONG).show();
             saveOAuthToken(user.getUsername(), user.getId(), token.getOauthToken(), token.getOauthTokenSecret());
             load(result,gridView);
-        }
+
     }
 }

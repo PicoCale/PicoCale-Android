@@ -69,7 +69,7 @@ public class MainActivity extends ActionBarActivity {
         alertDialogBuilder
                 .setMessage(getString(R.string.app_name)+" suggests you to allow your "+type+" to be detected for a better experience!")
                 .setCancelable(false)
-                .setPositiveButton("SettingsPage", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Settings", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (type.equals("location")) {
                             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));

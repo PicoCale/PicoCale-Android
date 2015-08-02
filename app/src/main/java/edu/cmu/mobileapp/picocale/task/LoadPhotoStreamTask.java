@@ -61,10 +61,6 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
         this.activity = activity;
         this.context=context;
         this.gridView = gridView;
-        if(gridView==null)
-        {
-            Log.i("Gridview","null");
-        }
         this.location = pLocation;
         this.radiusValue = pRadiusValue;
     }
@@ -73,8 +69,7 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mProgressDialog = ProgressDialog.show(activity,
-                "", activity.getString(R.string.progressLoadingText)); //$NON-NLS-1$ //$NON-NLS-2$
+        mProgressDialog = ProgressDialog.show(activity, "", activity.getString(R.string.progressLoadingText));
         mProgressDialog.setCanceledOnTouchOutside(true);
     }
 
@@ -83,18 +78,15 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
      */
     @Override
     protected PhotoList doInBackground(OAuth... arg0) {
-        Log.i("Entered", "BG");
         OAuthToken token = arg0[0].getToken();
 
-        Flickr f = FlickrHelper.getInstance().getFlickrAuthed(token.getOauthToken(),
-                token.getOauthTokenSecret());
+        Flickr f = FlickrHelper.getInstance().getFlickrAuthed(token.getOauthToken(), token.getOauthTokenSecret());
         oauthToken=token.getOauthToken();
         oauthTokenSecret=token.getOauthTokenSecret();
-//        Log.i("Token Secret", token.getOauthTokenSecret());
         Set<String> extras = new HashSet<String>();
-        extras.add("url_sq"); //$NON-NLS-1$
-        extras.add("url_l"); //$NON-NLS-1$
-        extras.add("views"); //$NON-NLS-1$
+        extras.add("url_sq");
+        extras.add("url_l");
+        extras.add("views");
         User user = arg0[0].getUser();
         try {
 
@@ -112,49 +104,30 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
             maxLongitude = currentLongitude - longitudeCorrectionFactor;
 
             //Getting the list of photos
-            //return f.getPeopleInterface().getPhotos(user.getId(), extras, 20, 1);
-            //photoURLList = new ArrayList<String>();
             PhotoList locationBasedList=new PhotoList();
-            PhotoList photoList=f.getPeopleInterface().getPhotos(user.getId(), extras, 20, 1);
-//            Log.i("===Count",Integer.toString(photoList.size()));
-            for(Photo photo:photoList)
-            {
-                if(photo!=null) {
-                    try {
-                        GeoData geoData = f.getGeoInterface().getLocation(photo.getId());
-                        photoLatitude = geoData.getLatitude();
-                        photoLongitude = geoData.getLongitude();
+            if(user!=null) {
+                PhotoList photoList = f.getPeopleInterface().getPhotos(user.getId(), extras, 20, 1);
 
-                        //printing out the values
-                        /*Log.i("===>Photo Lat:", Double.toString(photoLatitude));
-                        Log.i("===>Photo Lon:", Double.toString(photoLongitude));
-                        Log.i("===>Min Lat:", Double.toString(minLatitude));
-                        Log.i("===>Max Lat:", Double.toString(maxLatitude));
-                        Log.i("===>Min Lon:", Double.toString(minLongitude));
-                        Log.i("===>Max Lon:", Double.toString(maxLongitude));*/
+                for (Photo photo : photoList) {
+                    if (photo != null) {
+                        try {
+                            GeoData geoData = f.getGeoInterface().getLocation(photo.getId());
+                            photoLatitude = geoData.getLatitude();
+                            photoLongitude = geoData.getLongitude();
 
-                        //Deciding whether to display image or not
-                        if ((photoLatitude >=minLatitude && photoLatitude <= maxLatitude) &&
-                                (photoLongitude <=minLongitude && photoLongitude>=maxLongitude)){
-                            Log.i("Photo ID Added:", photo.getId());
-                            locationBasedList.add(photo);
-                            //photoURLList.add(photo.getLargeUrl());
-                            picoCaleImage=new PicoCaleImage(photo.getLargeUrl(), PicoCaleImageConstants.URL_IMAGE,photoLatitude,photoLongitude);
-                            photoURLList.add(picoCaleImage);
+                            //Deciding whether to display image or not
+                            if ((photoLatitude >= minLatitude && photoLatitude <= maxLatitude) &&
+                                    (photoLongitude <= minLongitude && photoLongitude >= maxLongitude)) {
+                                locationBasedList.add(photo);
+                                picoCaleImage = new PicoCaleImage(photo.getLargeUrl(), PicoCaleImageConstants.URL_IMAGE, photoLatitude, photoLongitude);
+                                photoURLList.add(picoCaleImage);
+                            }
+                        } catch (FlickrException e) {
+                            Log.i("Exc", e.getMessage() + e.getErrorMessage());
                         }
-                        else{
-                            Log.i("Sry!Photo ID Not Added:", photo.getId());
-                        }
-
-                    }
-                    catch (FlickrException e)
-                    {
-                        Log.i("Exc",e.getMessage()+e.getErrorMessage());
                     }
                 }
             }
-
-//            return f.getPeopleInterface().getPhotos(user.getId(), extras, 20, 1);
             return locationBasedList;
 
         } catch (Exception e) {
@@ -170,22 +143,9 @@ public class LoadPhotoStreamTask extends AsyncTask<OAuth, Void, PhotoList> {
     @Override
     protected void onPostExecute(PhotoList result) {
         if (result != null) {
-//            Log.i("Size:",Integer.toString(result.size()));
             LazyAdapter adapter = new LazyAdapter(context, result,oauthToken,oauthTokenSecret);
-            if(gridView==null)
-            {
-                Log.i("Gridview","null");
-            }
-            if(adapter==null)
-            {
-                Log.i("Adapter","null");
-            }
             gridView.setAdapter(adapter);
             gridView.setOnItemClickListener(new GalleryItemClickListener(activity,photoURLList, 2));
-        }
-        else
-        {
-            Toast.makeText(activity,"No photos available",Toast.LENGTH_LONG).show();
         }
         mProgressDialog.dismiss();
     }
