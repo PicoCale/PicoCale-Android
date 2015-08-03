@@ -81,7 +81,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
                 }
 
                 //Acknowledgement Toast message
-                Toast.makeText(getActivity().getApplicationContext(),"Settings Saved",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity().getApplicationContext(),"Settings Saved",Toast.LENGTH_SHORT).show();
             }
         });
 

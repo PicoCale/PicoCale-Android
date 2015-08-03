@@ -65,7 +65,7 @@ public class MainActivity extends ActionBarActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
         // set title
-        alertDialogBuilder.setTitle("Request "+type+" Access");
+        alertDialogBuilder.setTitle("Request "+type+" access");
 
         // set dialog message
         alertDialogBuilder
