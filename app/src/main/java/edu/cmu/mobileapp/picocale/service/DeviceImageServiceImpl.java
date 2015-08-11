@@ -55,12 +55,38 @@ public class DeviceImageServiceImpl implements ImageService {
         LatLng latLng = null;
         String location = "";
         String imagePath = "";
+
+        //1.//Code to be added------------------------
+        double minLatitude, maxLatitude;
+        double minLongitude, maxLongitude;
+        double latitudeCorrectionFactor, longitudeCorrectionFactor;
+        double currentLatitude = 0, currentLongitude = 0;
+        double radiusValue;
+
+        SharedPreferences sharedPref = activity.getSharedPreferences("PicoCale", 0);
+        radiusValue = Double.parseDouble(sharedPref.getString("userRadius", "5"));
+
+        //Getting the min, max latitude values
+        latitudeCorrectionFactor = DistanceUtils.getLatitudeCorrectionFactor(radiusValue);
+        minLatitude = currentLatitude - latitudeCorrectionFactor;
+        maxLatitude = currentLatitude + latitudeCorrectionFactor;
+
+        //Getting the min, max latitude values
+        longitudeCorrectionFactor = DistanceUtils.getLongitudeCorrectionFactor(radiusValue,minLatitude);
+        minLongitude = currentLongitude + longitudeCorrectionFactor;
+        maxLongitude = currentLongitude - longitudeCorrectionFactor;
+
+        //1.//Code to be added endss---------------
+
         for (int i = 0; i < count; i++) {
             cursor.moveToPosition(i);
             latitude = cursor.getDouble(cursor.getColumnIndex(MediaStore.Images.ImageColumns.LATITUDE));
             longitude = cursor.getDouble(cursor.getColumnIndex(MediaStore.Images.ImageColumns.LONGITUDE));
             latLng = new LatLng(latitude, longitude);
-            if(latitude != 0.0 && longitude != 0.0) {
+            //1.//Code to be modified---------------
+            if ((latitude >=minLatitude && latitude <= maxLatitude) &&
+                    (longitude <=minLongitude && longitude>=maxLongitude)) {
+                //1.//Code to be modified endss---------------
                 location = LocationUtils.getAddressFromLocation(activity, latLng).getAddressLine(0);
                 if(location.equals(requiredLocation)) {
                     imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA));
